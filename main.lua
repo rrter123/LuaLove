@@ -1,42 +1,42 @@
 local current_map = require("maps/map_1")
 local math = require("math")
+local check = require("checks")
+
 local texture_size_x = 100
 local texture_size_y = 100
 local offset_x = 0
 local offset_y = 0
 local person_image = love.graphics.newImage("flower.png")
-
+local player_size_x = 100 -- < texture_size_x
+local player_size_y = 100 -- < texture_size_y
 
 --local width, height = love.window.getDesktopDimensions()
 width, height = 800, 600
 success = love.window.setMode(width, height)
 love.keyboard.setKeyRepeat(true)
 
-local function can_go_down()
-  local check1, check2 = false, false
-  local player_position_x = width/2-50+offset_x
-  local player_position_y = height/2-50+offset_y
-  if current_map[math.floor((player_position_y+100)/100)+1][math.floor(player_position_x/100)+1] %10 == 0 then
-    check1 = true
-  end
-  if current_map[math.floor((player_position_y+100)/100)+1][math.floor((player_position_x+100)/100)+1] %10 == 0 then
-    check2 = true
-  end
-  return check1 and check2
-end
+
 
 function love.update(dt)
   local character_speed = 5
-   if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
+   if love.keyboard.isDown("up") or love.keyboard.isDown("w") 
+   and check.can_go_up(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
+   then
     offset_y =offset_y - character_speed
   end
-  if (love.keyboard.isDown("down") or love.keyboard.isDown("s")) and can_go_down() then
+  if (love.keyboard.isDown("down") or love.keyboard.isDown("s")) 
+  and check.can_go_down(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
+  then
     offset_y =offset_y + character_speed
   end
-  if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
+  if love.keyboard.isDown("left") or love.keyboard.isDown("a") 
+  and check.can_go_left(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
+  then
     offset_x =offset_x - character_speed
   end
-    if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
+    if love.keyboard.isDown("right") or love.keyboard.isDown("d") 
+    and check.can_go_right(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
+    then
     offset_x =offset_x + character_speed
   end
 end
@@ -65,7 +65,7 @@ function love.draw()
   draw_map(current_map)
   --avatar drawing
   local window_width, window_height = love.window.getMode()
-  love.graphics.draw(person_image, window_width/2-50, window_height/2-50)
+  love.graphics.draw(person_image, window_width/2-player_size_x/2, window_height/2-player_size_y/2)
   --avatar drawn
   
 end
