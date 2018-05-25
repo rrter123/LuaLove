@@ -1,21 +1,19 @@
-local current_map = require("maps/map_1")
+local current_map = require("maps/map_2")
 local math = require("math")
 local check = require("checks")
 
-local texture_size_x = 100
-local texture_size_y = 100
-local offset_x = 0
-local offset_y = 0
-local person_image = love.graphics.newImage("flower.png")
-local player_size_x = 100 -- < texture_size_x
-local player_size_y = 100 -- < texture_size_y
-
---local width, height = love.window.getDesktopDimensions()
-width, height = 800, 600
+width, height = love.window.getDesktopDimensions()
+--width, height = 800, 600
 success = love.window.setMode(width, height)
 love.keyboard.setKeyRepeat(true)
 
-
+local texture_size_x = 100
+local texture_size_y = 100
+local offset_x = -width/2+200
+local offset_y = -height/2+200
+local person_image = love.graphics.newImage("flower.png")
+local player_size_x = 98 -- < texture_size_x
+local player_size_y = 98 -- < texture_size_y
 
 function love.update(dt)
   local character_speed = 5
@@ -53,6 +51,7 @@ local function draw_map(tab)
   for y, row in ipairs(current_map) do
     for x, value in ipairs(row) do
       local key = "img"..value
+      --print (x,y,value)
       love.graphics.draw(current_map[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
     end
   end 
