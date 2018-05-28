@@ -17,7 +17,7 @@ local player_size_y = 98 -- < texture_size_y
 
 function love.update(dt)
   local character_speed = 5
-   if love.keyboard.isDown("up") or love.keyboard.isDown("w") 
+   if (love.keyboard.isDown("up") or love.keyboard.isDown("w")) 
    and check.can_go_up(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
    then
     offset_y =offset_y - character_speed
@@ -27,12 +27,12 @@ function love.update(dt)
   then
     offset_y =offset_y + character_speed
   end
-  if love.keyboard.isDown("left") or love.keyboard.isDown("a") 
+  if (love.keyboard.isDown("left") or love.keyboard.isDown("a")) 
   and check.can_go_left(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
   then
     offset_x =offset_x - character_speed
   end
-    if love.keyboard.isDown("right") or love.keyboard.isDown("d") 
+    if (love.keyboard.isDown("right") or love.keyboard.isDown("d"))
     and check.can_go_right(offset_x, offset_y, current_map, player_size_x, player_size_y, texture_size_x, texture_size_y, character_speed) 
     then
     offset_x =offset_x + character_speed
