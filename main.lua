@@ -44,6 +44,7 @@ function love.keypressed(key, scancode, isrepeat)
     love.window.close()
     love.event.quit()
   end
+  --Pressing E should open door if they are nearby and oad a new map with starting positions
 end
 
 local function draw_map(tab)
