@@ -23,9 +23,9 @@ local map =
 -- !Notice there shouldn't be a map 0, as Lua would interpret the number and the texture names would have to be changed accordingly 
 -- (001 would have to be just 1.jpg)
 
-map["img200"] = love.graphics.newImage("maps/map_2/200.jpg")
-map["img201"] = love.graphics.newImage("maps/map_2/201.jpg")
-map["img202"] = love.graphics.newImage("maps/map_2/202.jpg")
+map["img200"] = love.graphics.newImage("maps/dungeon_textures/200.jpg")
+map["img201"] = love.graphics.newImage("maps/dungeon_textures/201.jpg")
+map["img202"] = love.graphics.newImage("maps/dungeon_textures/202.jpg")
 
 map["path202"] = "maps/map_1"
 map["x102"] = 2

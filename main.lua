@@ -1,6 +1,7 @@
 local current_map = require("maps/map_2")
 local math = require("math")
 local check = require("checks")
+local maps = require("maps")
 
 width, height = love.window.getDesktopDimensions()
 --width, height = 800, 600
@@ -62,6 +63,8 @@ end
 
 
 function love.draw()
+  maps.gen_map(15,16,3)
+  current_map = require("maps/map_3")
   draw_map(current_map)
   --avatar drawing
   local window_width, window_height = love.window.getMode()
