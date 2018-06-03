@@ -1,3 +1,5 @@
+local love = require ("love")
+
 local player = {}
 
 player.person_image = love.graphics.newImage("flower.png")
@@ -10,7 +12,7 @@ player.level = 1
 player.inv = 0
 
 function player.inv_draw()
-  
+  love.graphics.rectangle( "fill", 0, 0, 1920/2, 1080/2 )
 end
 
 return player
