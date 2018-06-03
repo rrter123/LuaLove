@@ -5,14 +5,15 @@ local math = require("math")
 local player = {
   {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png")},
   {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")}
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png")}
   }
 width, height = love.window.getDesktopDimensions()
 
 player.person_image = love.graphics.newImage("flower.png")
 player.player_x = 2 -- < texture_size_x
 player.player_y = 2 -- < texture_size_y
-player.top = 3 -- !!!!!!Amount of stuff
+player.top = 4 -- !!!!!!Amount of stuff
 player.stats = {
 atk = 1,
 def = 1,

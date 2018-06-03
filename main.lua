@@ -42,11 +42,23 @@ function love.keypressed(key, scancode, isrepeat)
     love.event.quit()
   end
   if key == "e" then
-    local test = checks.around(player.player_x, player.player_y, current_map)
-    if test ~= 0 then
-      if test%10 == 2 then
-        load_map(test)
+    if inv == 1 then
+      local t = player[player.pos]["type"]
+      if t == "leaf" then
+        player.leaf_eq = player.pos
       end
+      if t == "pollen" then
+        player.pollen_eq = player.pos
+      end
+      if t == "petal" then
+        player.petal_eq = player.pos
+      end
+    else
+      local test = checks.around(player.player_x, player.player_y, current_map)
+      if test ~= 0 then
+        if test%10 == 2 then
+          load_map(test)
+      end  end
     end
   end
   if key == "i" then
@@ -70,6 +82,7 @@ function love.keypressed(key, scancode, isrepeat)
       player.pos = 1
     end
   end
+  
 end
 
 functions = {}
