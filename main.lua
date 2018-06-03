@@ -58,6 +58,18 @@ function love.keypressed(key, scancode, isrepeat)
       inv = 0
     end
   end
+  if (key == 'a' or key == 'left') and (inv==1) then
+    player.pos = player.pos - 1
+    if player.pos == 0 then
+      player.pos = player.top
+    end
+  end
+  if (key == 'd' or key == 'right') and (inv==1) then
+    player.pos = player.pos + 1
+    if player.pos == player.top+1 then
+      player.pos = 1
+    end
+  end
 end
 
 functions = {}
@@ -85,7 +97,7 @@ end
 
 
 function functions.update(dt)
-  local sleep_time = 0.15
+  local sleep_time = 0.2
    if (love.keyboard.isDown("up") or love.keyboard.isDown("w")) 
    and check.can_go_up(player.player_x, player.player_y, current_map)
    then
