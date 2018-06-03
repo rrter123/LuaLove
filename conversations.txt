@@ -1,0 +1,1 @@
+mapy generowane nazywamy map_10i, gdzie i to nr mapy
