@@ -63,6 +63,12 @@ end
 
 function player.inv_draw()
   draw_background()
+  love.graphics.setColor( 0.9, 1, 0.9, 0.4 )
+  love.graphics.rectangle( "fill", 100*(player.leaf_eq-1%player.invspace), 100*(math.floor(player.leaf_eq/player.invspace)), 100, 100)
+  love.graphics.rectangle( "fill", 100*(player.pollen_eq-1%player.invspace), 100*(math.floor(player.pollen_eq/player.invspace)), 100, 100)
+  love.graphics.rectangle( "fill", 100*(player.petal_eq-1%player.invspace), 100*(math.floor(player.petal_eq/player.invspace)), 100, 100)
+  
+  love.graphics.setColor( 1, 1, 1, 1 )
   for i, val in ipairs(player) do
     love.graphics.draw(val.img, 100*(i-1%player.invspace), 100* (math.floor(i/player.invspace)))
     if i == player.pos then
