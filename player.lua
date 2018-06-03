@@ -65,6 +65,9 @@ function player.inv_draw()
   draw_background()
   for i, val in ipairs(player) do
     love.graphics.draw(val.img, 100*(i-1%player.invspace), 100* (math.floor(i/player.invspace)))
+    if i == player.pos then
+      love.graphics.rectangle("line", 100*(i-1%player.invspace), 100*(math.floor(i/player.invspace)), 100, 100)
+    end
   end
   draw_player_info()
   draw_item_info()

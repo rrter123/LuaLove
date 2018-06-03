@@ -59,10 +59,16 @@ function love.keypressed(key, scancode, isrepeat)
     end
   end
   if (key == 'a' or key == 'left') and (inv==1) then
-    player.pos = (player.pos - 1)%player.top+1
+    player.pos = player.pos - 1
+    if player.pos == 0 then
+      player.pos = player.top
+    end
   end
   if (key == 'd' or key == 'right') and (inv==1) then
-    player.pos = (player.pos + 1)%player.top+1
+    player.pos = player.pos + 1
+    if player.pos == player.top+1 then
+      player.pos = 1
+    end
   end
 end
 
