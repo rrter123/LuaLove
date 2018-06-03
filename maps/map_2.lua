@@ -28,7 +28,7 @@ map["img201"] = love.graphics.newImage("maps/dungeon_textures/201.jpg")
 map["img202"] = love.graphics.newImage("maps/dungeon_textures/202.jpg")
 
 map["path202"] = "maps/map_1"
-map["x102"] = 2
-map["y102"] = 2
+map["x202"] = 11
+map["y202"] = 14
 
 return map
