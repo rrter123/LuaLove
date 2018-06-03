@@ -75,7 +75,7 @@ local function draw_map(tab)
 end
 
 function functions.draw()
-  maps.gen_map(15,16,3)
+  --maps.gen_map(15,16,3)
   --current_map = require("maps/map_3")
   draw_map(current_map)
   --avatar drawing
