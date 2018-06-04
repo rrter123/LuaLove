@@ -26,6 +26,13 @@ end
 
 
 function load_map(number)
+    if number/100 > 100 then
+    maps.gen_map(20,20,(math.floor((number/100)%10)+1),current_map["x"..number],current_map["y"..number])
+    --print("generated new map "..math.abs((number/100)%10))
+  end
+  if number == 212 then
+    maps.gen_map(20,20,1,current_map["x"..number],current_map["y"..number] )
+  end
   path = current_map["path"..number]
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
