@@ -14,7 +14,7 @@ local map =
   { 201, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 201, 201 },
   { 201, 200, 200, 200, 201, 200, 200, 200, 200, 200, 200, 200, 200, 200, 201, 201 },
   { 201, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 201, 201 },
-  { 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201 }
+  { 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 212, 201, 201, 201, 201 }
 }
 -- The main file reads the array, adds "img" to the number and draws the image from below
 -- The last digit is 0 if the tile is walk-through and 1 if it's a wall, or an obstacle, for an example 200 is walk-through
@@ -26,9 +26,13 @@ local map =
 map["img200"] = love.graphics.newImage("maps/dungeon_textures/floors/200.jpg")
 map["img201"] = love.graphics.newImage("maps/dungeon_textures/walls/201.jpg")
 map["img202"] = love.graphics.newImage("maps/dungeon_textures/doors/202.jpg")
+map["img212"] = love.graphics.newImage("maps/dungeon_textures/doors/castledoors.png") --this is temporary--
 
-map["path202"] = "maps/map_101"
+map["path202"] = "maps/map_1"
+map["path212"] = "maps/map_101"
 map["x202"] = 11
 map["y202"] = 14
 
+map["x212"] = 10 --this is temporary too
+map["y212"] = 10
 return map
