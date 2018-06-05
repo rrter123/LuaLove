@@ -16,47 +16,40 @@ local function tostr(map)
 end
 
 local function visit(x,y, width,length, visited)
-  if x-1 > 1 then
-    if not visited[10*(x-2)+y] then
-      return true
-    end
+  local tab = {}
+  if x+2 < width and not visited[10*(y-1)+x+2] then
+      tab[#tab+1] = 1
   end
-  if x+1 < width then
-    if not visited[10*x+y] then
-      return true
-    end
+  if x-2 > 1 and not visited[10*(y-1)+x-2] then
+      tab[#tab+1] = 2
   end
-  if y-1 > 1 then
-    if not visited[10*(x-1)+y-1] then
-      return true
-    end
+  if y-2 > 1 and not visited[10*(y-3)+x] then
+      tab[#tab+1] = 3
   end
-  if y+1 < length then
-    if not visited[10*(x-1)+y+1] then
-      return true
-    end
+  if y+2 < length and not visited[10*(y+1)+x] then
+      tab[#tab+1] = 4
   end
-  return false
+  return tab
 end
 
 local function neighbours(x,y, map)
   if x ~= 1 then
-    if map[x-1][y] % 10 == 0 then
+    if map[y][x-1] % 10 == 0 then
       return false
     end
   end
-  if x ~= #map then
-    if map[x+1][y] % 10 == 0 then
+  if x ~= #map[1] then
+    if map[y][x+1] % 10 == 0 then
       return false
     end
   end
   if y ~= 1 then
-    if map[x][y-1] % 10 == 0 then
+    if map[y-1][x] % 10 == 0 then
       return false
     end
   end
-  if y ~= #map[1] then
-    if map[x][y+1] % 10 == 0 then
+  if y ~= #map then
+    if map[y+1][x] % 10 == 0 then
       return false
     end
   end
@@ -64,6 +57,9 @@ local function neighbours(x,y, map)
 end
 
 function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and number of map we want to generate
+  math.randomseed(os.time())
+  math.random(2)
+  print (os.time())
   local map = {}
   local entities = {}
   local visited = {}
@@ -80,78 +76,82 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
       entities[i][j] = 0
     end
   end
-  if (doory-1) > 1 then
-      map[doory-1][doorx] = 10000+map_nr*100+12
-      visited[10*(doorx-2)+doory] = true
+  if doory-2 > 1 then
+      map[doory-2][doorx] = 10000+map_nr*100+12
+      map[doory-1][doorx] = 10000+map_nr*100
+      visited[10*(doory-3)+doorx] = true
+      visited[10*(doory-2)+doorx] = true
   else
-      map[doory+1][doorx] = 10000+map_nr*100+12
-      visited[10*doorx+doory] = true
+      map[doory+2][doorx] = 10000+map_nr*100+12
+      map[doory+1][doorx] = 10000+map_nr*100
+      visited[10*(doory+1)+doorx] = true
+      visited[10*doory+doorx] = true
   end
-  local y,x = doorx, doory
-  map[x][y] = 10000+map_nr*100  
-  visited[10*(x-1) + y] = true
+  local x,y = doorx, doory
+  map[y][x] = 10000+map_nr*100  
+  visited[10*(y-1) + x] = true
   queue = {}
   queue[#queue +1] = {x,y}
 
   while #queue > 0  do 
-    if visit(x,y,width, length, visited) then
-      while true do
-        local rand = math.random(4) -- 1 -> go right, 2 -> go left, 3-> go up, 4 -> go down 
-        if rand == 1 then
-          if x+1 < width and not visited[10*x+y] then
-            x = x + 1
-            map[x][y] = 10000+map_nr*100
-            if y-1 ~= 1 then
-              visited[10*(x-2)+y-1] = true
-            end
-            if y+1 ~= length then
-              visited[10*(x-2)+y+1] = true
-            end
-            break
-          end
+    local tab = visit(x,y,width,length, visited)
+    print ("dlugosc tab "..#tab)
+    print (x, y)
+    print ("dlugosc kolejki "..#queue)
+    if #tab ~= 0 then
+      local rand = math.random(#tab)
+      local vis = tab[rand]
+      print ("wartosc vis"..vis)
+      if vis == 1 then
+        x = x + 2
+        map[y][x] = 10000+map_nr*100
+        map[y][x-1] = 10000+map_nr*100
+        visited[10*(y-1)+x-1] = true
+        if y-1 > 1 then
+          visited[10*(y-2)+x-1] = true
         end
-        if rand == 2 then
-          if x-1 > 1 and not visited[10*(x-2)+y] then
-            x = x - 1
-            map[x][y] = 10000+map_nr*100
-            if y-1 ~= 1 then
-              visited[10*x+y-1] = true
-            end
-            if y+1 ~= length then
-              visited[10*x+y+1] = true
-            end
-            break
-          end
+        if y+1 < length then
+          visited[10*y+x-1] = true
         end
-        if rand == 3 then
-          if y-1 > 1 and not visited[10*(x-1)+y-1] then
-            y = y - 1
-            map[x][y] = 10000+map_nr*100
-            if x-1 ~= 1 then
-              visited[10*(x-2)+y+1] = true
-            end
-            if x+1 ~= width then
-              visited[10*x+y+1] = true
-            end
-            break
-          end
+      end
+      if vis == 2 then
+        x = x - 2
+        map[y][x] = 10000+map_nr*100
+        map[y][x+1] = 10000+map_nr*100
+        visited[10*(y-1)+x+1] = true
+        if y-1 > 1 then
+          visited[10*(y-2)+x+1] = true
         end
-        if rand == 4 then
-          if y+1 < length and not visited[10*(x-1)+y+1] then
-            y = y + 1
-            map[x][y] = 10000+map_nr*100
-            if x-1 ~= 1 then
-              visited[10*(x-2)+y-1] = true
-            end
-            if x+1 ~= width then
-              visited[10*x+y-1] = true
-            end
-            break
-          end
+        if y+1 < length then
+          visited[10*y+x+1] = true
+        end
+      end
+      if vis == 3 then
+        y = y - 2
+        map[y][x] = 10000+map_nr*100
+        map[y+1][x] = 10000+map_nr*100
+        visited[10*y+x] = true
+        if x-1 > 1 then
+          visited[10*y+x-1] = true
+        end
+        if x+1 < width then
+          visited[10*y+x+1] = true
+        end
+      end
+      if vis == 4 then
+        y = y + 2
+        map[y][x] = 10000+map_nr*100
+        map[y-1][x] = 10000+map_nr*100
+        visited[10*(y-2)+x] = true
+        if x-1 > 1 then
+          visited[10*(y-2)+x-1] = true
+        end
+        if x+1 < width then
+          visited[10*(y-2)+x+1] = true
         end
       end
       queue[#queue+1] = {x,y}
-      visited[10*(x-1)+y] = true
+      visited[10*(y-1)+x] = true
     else
       while true do
         local a,b = queue[#queue][1], queue[#queue][2]
@@ -159,7 +159,7 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
         if visit(a,b, width,length,visited) or #queue == 0 then
           x, y = a, b
           break
-        end           
+        end  
       end
     end
   end
@@ -173,7 +173,7 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
     door_x = math.random(width) 
     door_y = math.random(length)
   end
-  map[door_x][door_y] = 10000+map_nr*100+2 --generates door in random place on map
+  map[door_y][door_x] = 10000+map_nr*100+2 --generates door in random place on map
  
   local new_x, new_y = 1 + math.random(width-2), 1 + math.random(length-2)
  
