@@ -1,4 +1,5 @@
 local current_map = require("maps/map_1")
+local current_entities=require("maps/entities_1")
 local math = require("math")
 local check = require("checks")
 local maps = require("maps")
@@ -34,9 +35,11 @@ function load_map(number)
     maps.gen_map(30,30,1,current_map["x"..number],current_map["y"..number] )
   end
   path = current_map["path"..number]
+  path_e = current_entities["path"..number]
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
   current_map = require(path)
+  current_entities = require(path_e)
   set_offset()
 end
 
@@ -96,11 +99,11 @@ functions = {}
 
 local function draw_map(tab)
   --textures drawing begin
-  for y, row in ipairs(current_map) do
+  for y, row in ipairs(tab) do
     for x, value in ipairs(row) do
       local key = "img"..value
       --print (x,y,value)
-      love.graphics.draw(current_map[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
+      love.graphics.draw(tab[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
     end
   end 
   --textures drawn. Motion is simulated by changing the place in which texture drawing begins.
@@ -108,6 +111,7 @@ end
 
 function functions.draw()
   draw_map(current_map)
+  draw_map(current_entities)
   --avatar drawing
   local window_width, window_height = love.window.getMode()
   love.graphics.draw(player.person_image, window_width/2-texture_size_x/2, window_height/2-texture_size_y/2)
@@ -120,6 +124,7 @@ function functions.update(dt)
   local sleep_time = 0.2
    if (love.keyboard.isDown("up") or love.keyboard.isDown("w")) 
    and check.can_go_up(player.player_x, player.player_y, current_map)
+   and check.can_go_up(player.player_x, player.player_y, current_entities)
    then
     offset_y =offset_y - 100
     player.player_y = player.player_y - 1
@@ -127,7 +132,8 @@ function functions.update(dt)
     --sleep(sleep_time)
   end
   if (love.keyboard.isDown("down") or love.keyboard.isDown("s")) 
-  and check.can_go_down(player.player_x, player.player_y, current_map) 
+  and check.can_go_down(player.player_x, player.player_y, current_map)
+  and check.can_go_down(player.player_x, player.player_y, current_entities)
   then
     offset_y =offset_y + 100
     player.player_y =player.player_y +1
@@ -135,7 +141,8 @@ function functions.update(dt)
     --sleep(sleep_time)
   end
   if (love.keyboard.isDown("left") or love.keyboard.isDown("a")) 
-  and check.can_go_left(player.player_x, player.player_y, current_map) 
+  and check.can_go_left(player.player_x, player.player_y, current_map)
+  and check.can_go_left(player.player_x, player.player_y, current_entities)
   then
     offset_x =offset_x - 100
     player.player_x =player.player_x -1
@@ -144,6 +151,7 @@ function functions.update(dt)
   end
   if (love.keyboard.isDown("right") or love.keyboard.isDown("d")) 
   and check.can_go_right(player.player_x, player.player_y, current_map) 
+  and check.can_go_right(player.player_x, player.player_y, current_entities)
   then
     offset_x =offset_x + 100
     player.player_x =player.player_x +1
