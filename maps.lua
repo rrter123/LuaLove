@@ -61,11 +61,11 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
   math.random(2)
   print (os.time())
   local map = {}
-  local entities = {}
+  --local entities = {}
   local visited = {}
   for i=1, width do
     map[#map+1] = {}
-    entities[#entities+1] = {}
+    --entities[#entities+1] = {}
     for j=1, length do
       if i == 1 or i == width or j == 1 or j == length  then
         visited[#visited + 1] = true
@@ -73,7 +73,7 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
         visited[#visited + 1] = false
       end
       map[i][j] = 10000+map_nr*100+1
-      entities[i][j] = 0
+     -- entities[i][j] = 0
     end
   end
   if doory-2 > 1 then
@@ -180,7 +180,7 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
  --create new .lua file with new map
  
 local new_map = io.open("maps/map_10"..map_nr..".lua", "w") 
-new_map:write("map =\n"..tostr(map).."\n\n")
+new_map:write("local map =\n"..tostr(map).."\n\n")
 new_map:write('map["img'..(10000+map_nr*100)..'"] = love.graphics.newImage("maps/dungeon_textures/floors/200.jpg")\n')
 new_map:write('map["img'..(10000+map_nr*100+1)..'"] = love.graphics.newImage("maps/dungeon_textures/walls/201.jpg")\n')
 new_map:write('map["img'..(10000+map_nr*100+2)..'"] = love.graphics.newImage("maps/dungeon_textures/doors/202.jpg")\n')
@@ -194,9 +194,17 @@ new_map:write('map["y'..(10000+map_nr*100+12)..'"] = 14 \n')
 new_map:write("return map")
 new_map:flush()
 new_map:close()
+
+--create new .lua file with entities
+
 local new_entities = io.open("maps/entities_"..(100+map_nr)..".lua","w")
-new_entities:write("entities =\n"..tostr(entities).."\n\n")
---new_entities:write('entities['img'..
+new_entities:write("local entities =\n"..tostr(map).."\n\n")
+new_entities:write('entities["img'..(10000+map_nr*100)..'"] = love.graphics.newImage("entities/11.png")\n')
+new_entities:write('entities["img'..(10000+map_nr*100+1)..'"] = love.graphics.newImage("entities/11.png")\n')
+new_entities:write('entities["img'..(10000+map_nr*100+2)..'"] = love.graphics.newImage("entities/11.png")\n')
+new_entities:write('entities["img'..(10000+map_nr*100+12)..'"] = love.graphics.newImage("entities/11.png")\n')
+new_entities:write('entities["path'..(10000+map_nr*100+12)..'"] = "maps/entities_1"\n')
+new_entities:write('entities["path'..(10000+map_nr*100+2)..'"] = "maps/entities_10'..(map_nr+1)..'"\n')
 new_entities:write("return entities")
 new_entities:flush()
 new_entities:close()
