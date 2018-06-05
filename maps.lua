@@ -95,13 +95,9 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
 
   while #queue > 0  do 
     local tab = visit(x,y,width,length, visited)
-    print ("dlugosc tab "..#tab)
-    print (x, y)
-    print ("dlugosc kolejki "..#queue)
     if #tab ~= 0 then
       local rand = math.random(#tab)
       local vis = tab[rand]
-      print ("wartosc vis"..vis)
       if vis == 1 then
         x = x + 2
         map[y][x] = 10000+map_nr*100
