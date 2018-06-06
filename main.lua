@@ -34,8 +34,8 @@ function load_map(number)
   if number == 212 then
     maps.gen_map(30,30,1,current_map["x"..number],current_map["y"..number] )
   end
-  path = current_map["path"..number]
-  path_e = current_entities["path"..number]
+  local path = current_map["path"..number]
+  local path_e = current_entities["path"..number]
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
   current_map = require(path)
