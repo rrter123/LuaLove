@@ -29,6 +29,9 @@ local function visit(x,y, width,length, visited)
   if y+2 < length and not visited[10*(y+1)+x] then
       tab[#tab+1] = 4
   end
+  if #tab == 0 then
+    return nil
+  end
   return tab
 end
 
@@ -95,7 +98,7 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
 
   while #queue > 0  do 
     local tab = visit(x,y,width,length, visited)
-    if #tab ~= 0 then
+    if tab then
       local rand = math.random(#tab)
       local vis = tab[rand]
       if vis == 1 then
@@ -152,7 +155,8 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
       while true do
         local a,b = queue[#queue][1], queue[#queue][2]
         queue[#queue] = nil
-        if visit(a,b, width,length,visited) or #queue == 0 then
+        local t = visit(a,b, width,length,visited)
+        if t or #queue == 0 then
           x, y = a, b
           break
         end  
