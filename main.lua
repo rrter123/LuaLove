@@ -25,16 +25,33 @@ function set_offset()
   offset_y = -height/2+player.player_y*100-texture_size_y/2
 end
 
+function exists(path, number)
+   local ok, err, code = os.rename(path..'.lua', path..'.lua')
+   print (ok,err,code)
+   if not ok then
+      if code == 13 then
+        print("file exists")
+         -- Permission denied, but it exists
+      end
+      if code == 2 then
+        if number == 212 then
+          maps.gen_map(30,30,1,current_map["x"..number],current_map["y"..number] )
+        else
+          maps.gen_map(30,30,(math.floor((number/100)%10)+1),current_map["x"..number],current_map["y"..number])
+        end
+      end
+    else
+      if number/100 > 100 then
+        current_map = require(path)
+        maps.update_entities(current_map, math.floor((number/100)%10)+1)
+      end
+    end
+end
+
 
 function load_map(number)
-    if number/100 > 100 then
-    maps.gen_map(30,30,(math.floor((number/100)%10)+1),current_map["x"..number],current_map["y"..number])
-    --print("generated new map "..math.abs((number/100)%10))
-  end
-  if number == 212 then
-    maps.gen_map(30,30,1,current_map["x"..number],current_map["y"..number] )
-  end
   local path = current_map["path"..number]
+  exists(path,number)
   local path_e = current_entities["path"..number]
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
@@ -97,21 +114,29 @@ end
 
 functions = {}
 
-local function draw_map(tab)
+local function draw_map()
   --textures drawing begin
-  for y, row in ipairs(tab) do
+  for y, row in ipairs(current_map) do
     for x, value in ipairs(row) do
       local key = "img"..value
       --print (x,y,value)
-      love.graphics.draw(tab[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
+      love.graphics.draw(current_map[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
+    end
+  end 
+  for y, row in ipairs(current_entities) do
+    for x, value in ipairs(row) do
+      if value ~= 0 then
+        local key = "img"..value
+        --print (x,y,value)
+        love.graphics.draw(current_entities[key], ((x-1)*texture_size_x)-offset_x, ((y-1)*texture_size_y)-offset_y)
+      end
     end
   end 
   --textures drawn. Motion is simulated by changing the place in which texture drawing begins.
 end
 
 function functions.draw()
-  draw_map(current_map)
-  draw_map(current_entities)
+  draw_map()
   --avatar drawing
   local window_width, window_height = love.window.getMode()
   love.graphics.draw(player.person_image, window_width/2-texture_size_x/2, window_height/2-texture_size_y/2)
