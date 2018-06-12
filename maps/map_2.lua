@@ -26,13 +26,13 @@ local map =
 map["img200"] = love.graphics.newImage("maps/dungeon_textures/floors/200.jpg")
 map["img201"] = love.graphics.newImage("maps/dungeon_textures/walls/201.jpg")
 map["img202"] = love.graphics.newImage("maps/dungeon_textures/doors/202.jpg")
-map["img212"] = love.graphics.newImage("maps/dungeon_textures/doors/castledoors.png") --this is temporary--
+map["img212"] = love.graphics.newImage("maps/dungeon_textures/doors/castledoors.png")
 
 map["path202"] = "maps/map_1"
 map["path212"] = "maps/map_101"
 map["x202"] = 11
 map["y202"] = 14
 
-map["x212"] = 10 --this is temporary too
+map["x212"] = 10
 map["y212"] = 10
 return map
