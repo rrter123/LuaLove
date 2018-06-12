@@ -27,7 +27,6 @@ end
 
 function exists(path, number)
    local ok, err, code = os.rename(path..'.lua', path..'.lua')
-   print (ok,err,code)
    if not ok then
       if code == 13 then
         print("file exists")
@@ -41,9 +40,16 @@ function exists(path, number)
         end
       end
     else
-      if number/100 > 100 then
+      if (number/100 > 100 and number%100 == 2) or number == 212 then
+        player.player_x = current_map["x"..number]
+        player.player_y = current_map["y"..number]
         current_map = require(path)
-        maps.update_entities(current_map, math.floor((number/100)%10)+1)
+        if number/100 > 100 then
+          maps.update_entities(current_map, math.floor((number/100)%10)+1)
+        else
+          maps.update_entities(current_map, 1)
+        end
+        return true
       end
     end
 end
@@ -51,11 +57,13 @@ end
 
 function load_map(number)
   local path = current_map["path"..number]
-  exists(path,number)
+  local answer = exists(path,number)
   local path_e = current_entities["path"..number]
-  player.player_x = current_map["x"..number]
-  player.player_y = current_map["y"..number]
-  current_map = require(path)
+  if answer == nil then
+    player.player_x = current_map["x"..number]
+    player.player_y = current_map["y"..number]
+    current_map = require(path)
+  end
   current_entities = require(path_e)
   set_offset()
 end

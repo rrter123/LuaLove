@@ -203,7 +203,7 @@ end
 --create or update .lua file with entities
 
 function maps.update_entities(map, map_nr)
-  os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil
+  local a = os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil
   math.randomseed(os.time())
   math.random(2)
   local entities = {}
@@ -219,6 +219,7 @@ function maps.update_entities(map, map_nr)
    local enemy_1 = math.random(20)
    --random number of enemy_2
   local enemy_2 = math.random(10)
+  print (chests,enemy_1,enemy_2)
   
   for i=1, chests do
     local x = math.random(#map[1])
@@ -227,8 +228,8 @@ function maps.update_entities(map, map_nr)
         x = math.random(#map[1])
         y = math.random(#map)
     end
-      entities[x][y] = 32  
-  end
+      entities[y][x] = 32  
+   end
   for i=1, enemy_1 do
     local x = math.random(#map[1])
     local y = math.random(#map)
@@ -236,6 +237,7 @@ function maps.update_entities(map, map_nr)
       x = math.random(#map[1])
       y = math.random(#map)
     end
+    entities[y][x] = 12  
   end
   for i=1, enemy_2 do
     local x = math.random(#map[1])
