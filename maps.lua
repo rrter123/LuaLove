@@ -7,6 +7,9 @@ maps = {}
 
 --function formating table to string
 
+
+
+
 local function tostr(map)
   str= {}
   for i=1, #map do
@@ -59,16 +62,14 @@ local function neighbours(x,y, map)
   return true  
 end
 
+
 function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and number of map we want to generate
   math.randomseed(os.time())
   math.random(2)
-  print (os.time())
   local map = {}
-  --local entities = {}
   local visited = {}
   for i=1, width do
     map[#map+1] = {}
-    --entities[#entities+1] = {}
     for j=1, length do
       if i == 1 or i == width or j == 1 or j == length  then
         visited[#visited + 1] = true
@@ -76,7 +77,6 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
         visited[#visited + 1] = false
       end
       map[i][j] = 10000+map_nr*100+1
-     -- entities[i][j] = 0
     end
   end
   if doory-2 > 1 then
@@ -179,35 +179,86 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
  
  --create new .lua file with new map
  
-local new_map = io.open("maps/map_10"..map_nr..".lua", "w") 
-new_map:write("local map =\n"..tostr(map).."\n\n")
-new_map:write('map["img'..(10000+map_nr*100)..'"] = love.graphics.newImage("maps/dungeon_textures/floors/200.jpg")\n')
-new_map:write('map["img'..(10000+map_nr*100+1)..'"] = love.graphics.newImage("maps/dungeon_textures/walls/201.jpg")\n')
-new_map:write('map["img'..(10000+map_nr*100+2)..'"] = love.graphics.newImage("maps/dungeon_textures/doors/202.jpg")\n')
-new_map:write('map["img'..(10000+map_nr*100+12)..'"] = love.graphics.newImage("maps/dungeon_textures/doors/castledoors.png")\n')
-new_map:write('map["path'..(10000+map_nr*100+12)..'"] = "maps/map_1"\n')
-new_map:write('map["path'..(10000+map_nr*100+2)..'"] = "maps/map_10'..(map_nr+1)..'"\n')
-new_map:write('map["x'..(10000+map_nr*100+2)..'"] = '..new_x..' \n')
-new_map:write('map["y'..(10000+map_nr*100+2)..'"] = '..new_y..'\n')
-new_map:write('map["x'..(10000+map_nr*100+12)..'"] = 11 \n')
-new_map:write('map["y'..(10000+map_nr*100+12)..'"] = 14 \n')
-new_map:write("return map")
-new_map:flush()
-new_map:close()
+  local new_map = io.open("maps/map_10"..map_nr..".lua", "w") 
+  new_map:write("local map =\n"..tostr(map).."\n\n")
+  new_map:write('map["img'..(10000+map_nr*100)..'"] = love.graphics.newImage("maps/dungeon_textures/floors/200.jpg")\n')
+  new_map:write('map["img'..(10000+map_nr*100+1)..'"] = love.graphics.newImage("maps/dungeon_textures/walls/201.jpg")\n')
+  new_map:write('map["img'..(10000+map_nr*100+2)..'"] = love.graphics.newImage("maps/dungeon_textures/doors/202.jpg")\n')
+  new_map:write('map["img'..(10000+map_nr*100+12)..'"] = love.graphics.newImage("maps/dungeon_textures/doors/castledoors.png")\n')
+  new_map:write('map["path'..(10000+map_nr*100+12)..'"] = "maps/map_2"\n')
+  new_map:write('map["path'..(10000+map_nr*100+2)..'"] = "maps/map_10'..(map_nr+1)..'"\n')
+  new_map:write('map["x'..(10000+map_nr*100+2)..'"] = '..new_x..' \n')
+  new_map:write('map["y'..(10000+map_nr*100+2)..'"] = '..new_y..'\n')
+  new_map:write('map["x'..(10000+map_nr*100+12)..'"] = 12 \n')
+  new_map:write('map["y'..(10000+map_nr*100+12)..'"] = 14 \n')
+  new_map:write("return map")
+  new_map:flush()
+  new_map:close()
 
 --create new .lua file with entities
+  maps.update_entities(map, map_nr)
 
-local new_entities = io.open("maps/entities_"..(100+map_nr)..".lua","w")
-new_entities:write("local entities =\n"..tostr(map).."\n\n")
-new_entities:write('entities["img'..(10000+map_nr*100)..'"] = love.graphics.newImage("entities/11.png")\n')
-new_entities:write('entities["img'..(10000+map_nr*100+1)..'"] = love.graphics.newImage("entities/11.png")\n')
-new_entities:write('entities["img'..(10000+map_nr*100+2)..'"] = love.graphics.newImage("entities/11.png")\n')
-new_entities:write('entities["img'..(10000+map_nr*100+12)..'"] = love.graphics.newImage("entities/11.png")\n')
-new_entities:write('entities["path'..(10000+map_nr*100+12)..'"] = "maps/entities_1"\n')
-new_entities:write('entities["path'..(10000+map_nr*100+2)..'"] = "maps/entities_10'..(map_nr+1)..'"\n')
-new_entities:write("return entities")
-new_entities:flush()
-new_entities:close()
 end
+
+--create or update .lua file with entities
+
+function maps.update_entities(map, map_nr)
+  os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil
+  math.randomseed(os.time())
+  math.random(2)
+  local entities = {}
+  for i=1, #map do
+    entities[#entities+1] = {}
+    for j=1, #map[1] do
+      entities[i][j] = 0
+    end
+  end
+   --random number of chests
+   local chests = math.random(7)
+   --random number of enemy_1
+   local enemy_1 = math.random(20)
+   --random number of enemy_2
+  local enemy_2 = math.random(10)
+  
+  for i=1, chests do
+    local x = math.random(#map[1])
+    local y = math.random(#map)
+    while map[y][x] % 10 ~= 0 do
+        x = math.random(#map[1])
+        y = math.random(#map)
+    end
+      entities[x][y] = 32  
+  end
+  for i=1, enemy_1 do
+    local x = math.random(#map[1])
+    local y = math.random(#map)
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 do
+      x = math.random(#map[1])
+      y = math.random(#map)
+    end
+  end
+  for i=1, enemy_2 do
+    local x = math.random(#map[1])
+    local y = math.random(#map)
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 do
+      x = math.random(#map[1])
+      y = math.random(#map)
+    end
+      entities[y][x] = 22    
+  end
+  
+  local new_entities = io.open("maps/entities_"..(100+map_nr)..".lua","w")
+  new_entities:write("local entities =\n"..tostr(entities).."\n\n")
+  new_entities:write('entities["img12"] = love.graphics.newImage("entities/enemies/pisilohe10.png")\n')
+  new_entities:write('entities["img22"] = love.graphics.newImage("entities/enemies/pisilohe12.png")\n')
+    new_entities:write('entities["img32"] = love.graphics.newImage("entities/chests/chest.png")\n')
+  new_entities:write('entities["path'..(10000+map_nr*100+12)..'"] = "maps/entities_2"\n')
+  new_entities:write('entities["path'..(10000+map_nr*100+2)..'"] = "maps/entities_10'..(map_nr+1)..'"\n')
+  new_entities:write("return entities")
+  new_entities:flush()
+  new_entities:close()
+
+end
+
 
 return maps
