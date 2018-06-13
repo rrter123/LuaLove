@@ -40,6 +40,8 @@ local fontheight = 50
 local font = love.graphics.newFont("font/trench100free.ttf", 25)
 love.graphics.setFont(font)
 
+local enemy = {}
+
 local function draw_background_inv()
   love.graphics.setColor( 0.9, 0.9, 0.9, 1 )
   love.graphics.rectangle( "fill", 0, 0, width/2, height )
@@ -50,13 +52,40 @@ local function draw_background_inv()
   love.graphics.setColor( 1, 1, 1, 1 )
 end
 
-
+local function draw_background_battle()
+  love.graphics.setColor( 0.9, 0.9, 0.9, 1 )
+  love.graphics.rectangle( "fill", 0, 0, width/2, height )
+  love.graphics.setColor( 0.6, 0.6, 0.6, 1 )
+  love.graphics.rectangle( "fill", width/2, 0, width/2, height )
+  love.graphics.setColor( 1, 1, 1, 1 )
+end
 local function draw_player_info()
   local lineheight = 0
   love.graphics.setColor( 0, 0, 0, 1 )
   for key, value in pairs(player.stats) do
     love.graphics.print(key..": "..value, width/2+10, height/2+10+lineheight)
     lineheight = lineheight + fontheight 
+  end
+  love.graphics.setColor( 1, 1, 1, 1 )
+end
+
+local function draw_player_and_enemy_info()
+  local lineheight = 0
+  love.graphics.draw(player.person_image, (width/4)-50, 10)
+  love.graphics.draw(enemy.enemy_image, (3*width/4)-50, 10)
+  love.graphics.setColor( 0, 0, 0, 1 )
+  for key, value in pairs(player.stats) do 
+    if key ~= 'money' and key ~= 'xp' and key ~= 'maxxp' then
+      love.graphics.print(key..": "..value, (width/4)-50, height/2+10+lineheight)
+      lineheight = lineheight + fontheight 
+    end
+  end
+  lineheight = 0
+  for key, value in pairs(enemy.stats) do
+    if key ~= 'money' and key ~= 'init_hp' then
+      love.graphics.print(key..": "..value, (3*width/4)-50, height/2+10+lineheight)
+      lineheight = lineheight + fontheight 
+    end
   end
   love.graphics.setColor( 1, 1, 1, 1 )
 end
@@ -83,6 +112,13 @@ local function draw_inventory()
   end
 end
 
+local function draw_battle()
+ love.graphics.setColor( 0.9, 1, 0.9, 0.9 )
+  love.graphics.rectangle( "fill", width/4, height - height/10, width/2, height)
+  love.graphics.setColor( 0.5, 0.5, 0.5, 0.5 )
+  love.graphics.print("1 - LEAF ATTACK 2 - POLLEN ATTACK", width/4 + width/12, height-height/15)
+end
+
 function player.inv_draw()
   draw_background_inv()
   draw_inventory()
@@ -94,37 +130,120 @@ function player.found_chest()
   math.randomseed(os.time())
   math.random(2)
   local money = math.random(20)
-  print (money)
   player.stats.money = player.stats.money + money*10
 end
-function player.battle(number)
-  --[[
-  draw_background()
-  love.graphics.setColor( 0.9, 1, 0.9, 0.4 )
-  local enemy = {}
+function player.gen_enemy(number)
+  
   if number == 12 then
     enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe10.png")
     enemy.stats = {
+      level = player.stats.level,
+      hp = math.floor(player.stats.hp/2),
+      init_hp = math.floor(player.stats.hp/2),
+      money = player.stats.level*100,
       atk = player.stats.atk,
-      def = player.stats.def,
-      hp = math.floor(player.stats.hp*1.25),
-      level = player.stats.level}
+      def = player.stats.def}
   else
     enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe12.png")
     enemy.stats = {
-      atk = math.floor(player.stats.atk*1.25),
-      def = math.floor(player.stats.def*1.25),
+      level = player.stats.level+1,
       hp = math.floor(player.stats.hp*1.75),
-      level = player.stats.level+1}
-  end
-  --]]  
-    
-  
-  
-  return false 
+      init_hp = math.floor(player.stats.hp*1.75),
+      money = math.floor(player.stats.level*100*1.25),
+      atk = math.floor(player.stats.atk*1.25),
+      def = math.floor(player.stats.def*1.25)}
+  end  
   
 end
+function player.battle_draw()
+  draw_background_battle()
+  draw_player_and_enemy_info()
+  draw_battle()
+end
 
+local function battle_loss()
+  love.graphics.setColor( 1, 1, 1, 1 )
+  love.graphics.print( "YOU LOSE", width/2-10, height/2-10)
+  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
+end
+
+local function battle_win()
+  love.graphics.setColor( 1, 1, 1, 1 )
+  love.graphics.print( "YOU WIN", width/2-10, height/2-10)
+  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
+end
+
+function player.check_hp()
+  if player.stats.hp <= 0 then
+    love.draw = battle_loss
+    player.stats.xp = 0
+    player.stats.money = 0
+    player.stats.hp = player.stats.level*10
+  end
+end
+function player.level_up()
+  player.stats.xp = player.stats.xp + enemy.stats.init_hp
+  if player.stats.xp > player.stats.maxxp then
+    player.stats.level = player.stats.level + 1
+    player.stats.xp = 0
+    player.stats.maxxp = player.stats.maxxp*1.25
+    player.stats.hp = 10*player.stats.level
+    player.stats.money = player.stats.money + enemy.stats.money
+  end
+end
+function player.battle_moves(status)
+  if status == 1 then
+    local d = player[player.leaf_eq].atk - enemy.stats.def
+    if d > 0 then
+      enemy.stats.hp = enemy.stats.hp - d
+    else
+      player.stats.hp = player.stats.hp + d
+    end
+    if enemy.stats.hp > 0 then
+      local diff = enemy.stats.atk - player[player.petal_eq].def 
+      if diff > 0 then
+        player.stats.hp = player.stats.hp - enemy.stats.atk
+      else
+        enemy.stats.hp = enemy.stats.hp + diff
+      end
+    end
+    if enemy.stats.hp <= 0 then
+      love.draw = battle_win
+      player.level_up()
+    end
+    player.check_hp()
+  end
+  if status == 2 then
+    local d = player[player.pollen_eq].atk - enemy.stats.def
+    if d > 0 then
+      enemy.stats.hp = enemy.stats.hp - d
+    else
+      player.stats.hp = player.stats.hp + d
+    end
+    if enemy.stats.hp > 0 then
+      local diff = enemy.stats.atk - player[player.petal_eq].def 
+      if diff > 0 then
+        player.stats.hp = player.stats.hp - enemy.stats.atk
+      else
+        enemy.stats.hp = enemy.stats.hp + diff
+      end
+    end
+    if enemy.stats.hp <= 0 then 
+      love.draw = battle_win
+      player.level_up()
+    end
+    player.check_hp()
+  end
+  
+
+end
+
+function player.check_status()
+  if player.stats.hp <= 0 or enemy.stats.hp <= 0 then
+    return 1
+  end
+  return 0
+end
 
 
 function player.shop_draw()

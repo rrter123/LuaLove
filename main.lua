@@ -71,11 +71,18 @@ end
 
 local inv = 0
 local shop = 0
+local battle = 0
+local bat_end = 0
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
     if shop == 1 then 
       love.draw = functions.draw
       shop=0
+    end
+    print (bat_end)
+    if battle == 1 and bat_end == 1 then
+      love.draw = functions.draw
+      battle = 0
     else
       love.window.close()
       love.event.quit()
@@ -87,6 +94,9 @@ function love.keypressed(key, scancode, isrepeat)
     --if shop == 1
       --player.sell_buy()
     --end
+    --if battle == 1 then
+      
+     -- end
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
       if test ~= 0 then
@@ -99,17 +109,12 @@ function love.keypressed(key, scancode, isrepeat)
         if test == 32 then
           player.found_chest()
           current_entities[y][x] = 0
-        else
-          local battle = player.battle(test)
-          if battle then
-            current_entities[y][x] = 0
-          else
-            current_map = require("maps/map_1")
-            current_entities = require("maps/entities_1")
-            player.player_x = 2
-            player.player_y = 2
-            set_offset()
-          end
+        end
+        if test == 22 or test == 12 then
+          battle = 1
+          player.gen_enemy(test)
+          love.draw = player.battle_draw
+          current_entities[y][x] = 0
         end 
       end
       if test%10 == 3 then
@@ -141,6 +146,14 @@ function love.keypressed(key, scancode, isrepeat)
     if player.pos == #player+1 then
       player.pos = 1
     end
+  end
+  if key == '1' and battle == 1 then
+    player.battle_moves(1)
+    bat_end = player.check_status()
+  end
+  if key == '2' and battle == 1 then
+    player.battle_moves(2)
+    bat_end = player.check_status()
   end
 end
 
