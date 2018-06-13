@@ -43,6 +43,7 @@ local function draw_background()
   love.graphics.setColor( 1, 1, 1, 1 )
 end
 
+
 local function draw_player_info()
   local lineheight = 0
   love.graphics.setColor( 0, 0, 0, 1 )
@@ -79,5 +80,41 @@ function player.inv_draw()
   draw_player_info()
   draw_item_info()
 end
+
+function player.found_chest()
+  math.randomseed(os.time())
+  math.random(2)
+  local money = math.random(20)
+  print (money)
+  player.stats.money = player.stats.money + money*10
+end
+function player.battle(number)
+  --[[
+  draw_background()
+  love.graphics.setColor( 0.9, 1, 0.9, 0.4 )
+  local enemy = {}
+  if number == 12 then
+    enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe10.png")
+    enemy.stats = {
+      atk = player.stats.atk,
+      def = player.stats.def,
+      hp = math.floor(player.stats.hp*1.25),
+      level = player.stats.level}
+  else
+    enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe12.png")
+    enemy.stats = {
+      atk = math.floor(player.stats.atk*1.25),
+      def = math.floor(player.stats.def*1.25),
+      hp = math.floor(player.stats.hp*1.75),
+      level = player.stats.level+1}
+  end
+  --]]  
+    
+  
+  
+  return false 
+  
+end
+
 
 return player
