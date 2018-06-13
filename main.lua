@@ -71,19 +71,15 @@ end
 
 local inv = 0
 local shop = 0
-<<<<<<< HEAD
 local battle = 0
 local bat_end = 0
-=======
 local sell = 0
->>>>>>> b374cb64e173f3db52eae50eb61575f2a87940df
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
     if shop == 1 then 
       love.draw = functions.draw
       shop=0
     end
-    print (bat_end)
     if battle == 1 and bat_end == 1 then
       love.draw = functions.draw
       battle = 0
@@ -98,10 +94,6 @@ function love.keypressed(key, scancode, isrepeat)
     end
     if shop == 1 then
       player.sell_buy(sell)
-    --end
-    --if battle == 1 then
-      
-     -- end
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
       if test ~= 0 then
@@ -177,7 +169,6 @@ function love.keypressed(key, scancode, isrepeat)
       end
     end
   end
-<<<<<<< HEAD
   if key == '1' and battle == 1 then
     player.battle_moves(1)
     bat_end = player.check_status()
@@ -186,9 +177,6 @@ function love.keypressed(key, scancode, isrepeat)
     player.battle_moves(2)
     bat_end = player.check_status()
   end
-=======
-  
->>>>>>> b374cb64e173f3db52eae50eb61575f2a87940df
 end
 
 

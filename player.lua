@@ -61,7 +61,6 @@ local function draw_player_info()
   end
   love.graphics.setColor( 1, 1, 1, 1 )
 end
-<<<<<<< HEAD
 
 local function draw_player_and_enemy_info()
   local lineheight = 0
@@ -83,11 +82,9 @@ local function draw_player_and_enemy_info()
   end
   love.graphics.setColor( 1, 1, 1, 1 )
 end
-local function draw_item_info()
-=======
+
 local function draw_item_info(off1, off2)
   if off1 == nil then off1, off2= 0,0 end
->>>>>>> b374cb64e173f3db52eae50eb61575f2a87940df
   local lineheight = 0
   for key, value in pairs(player[player.pos]) do
     if key~="img" then
