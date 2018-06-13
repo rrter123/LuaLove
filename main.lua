@@ -93,7 +93,27 @@ function love.keypressed(key, scancode, isrepeat)
       if test ~= 0 then
         if test%10 == 2 then
           load_map(test)
-      end  end
+      end
+    else 
+      local y, x = 0
+      test, y, x = checks.around(player.player_x, player.player_y, current_entities)
+      if test == 32 then
+        player.found_chest()
+        current_entities[y][x] = 0
+     else
+       local battle = player.battle(test)
+       if battle then
+         current_entities[y][x] = 0
+       else
+         current_map = require("maps/map_1")
+         current_entities = require("maps/entities_1")
+         player.player_x = 2
+         player.player_y = 2
+         set_offset()
+       end
+      end      
+      
+    end
     end
   end
   if key == "i" then
