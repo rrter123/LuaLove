@@ -1,22 +1,14 @@
 local love = require ("love")
---local math = require("math")
-local shop = require("shop")
+local sh = require("shop")
 
 local player = {
-  {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png")},
-  {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")}
+  {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png"), price = 5},
+  {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png"), price = 5},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png"), price = 5},
+  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png"), price = 5}
   }
 width, height = love.window.getDesktopDimensions()
-
+player.shop = sh
 player.person_image = love.graphics.newImage("flower.png")
 player.player_x = 2 -- < texture_size_x
 player.player_y = 2 -- < texture_size_y
@@ -26,7 +18,7 @@ atk = 1,
 def = 1,
 hp = 10,
 level = 1,
-money = 50,
+money = 10,
 xp = 0,
 maxxp = 10
 }
@@ -35,9 +27,10 @@ player.pollen_eq = 2
 player.petal_eq=3
 
 player.pos = 1
+
 player.invspace = math.floor(width/200)
-local fontheight = 50
-local font = love.graphics.newFont("font/trench100free.ttf", 25)
+local fontheight = 25
+local font = love.graphics.newFont("font/trench100free.ttf", fontheight)
 love.graphics.setFont(font)
 
 local enemy = {}
@@ -45,9 +38,9 @@ local enemy = {}
 local function draw_background_inv()
   love.graphics.setColor( 0.9, 0.9, 0.9, 1 )
   love.graphics.rectangle( "fill", 0, 0, width/2, height )
-  love.graphics.setColor( 0.6, 0.6, 0.6, 1 )
+  love.graphics.setColor( 0.5, 0.5, 0.5, 1 )
   love.graphics.rectangle( "fill", width/2, 0, width/2, height/2 )
-  love.graphics.setColor( 0.8, 0.8, 0.8, 1 )
+  love.graphics.setColor( 0.6, 0.6, 0.6, 1 )
   love.graphics.rectangle( "fill", width/2, height/2, width/2, height/2 )
   love.graphics.setColor( 1, 1, 1, 1 )
 end
@@ -68,6 +61,7 @@ local function draw_player_info()
   end
   love.graphics.setColor( 1, 1, 1, 1 )
 end
+<<<<<<< HEAD
 
 local function draw_player_and_enemy_info()
   local lineheight = 0
@@ -90,10 +84,14 @@ local function draw_player_and_enemy_info()
   love.graphics.setColor( 1, 1, 1, 1 )
 end
 local function draw_item_info()
+=======
+local function draw_item_info(off1, off2)
+  if off1 == nil then off1, off2= 0,0 end
+>>>>>>> b374cb64e173f3db52eae50eb61575f2a87940df
   local lineheight = 0
   for key, value in pairs(player[player.pos]) do
     if key~="img" then
-      love.graphics.print(key..": "..value, width/2+10, 10+lineheight)
+      love.graphics.print(key..": "..value, off1+width/2+10, off2+10+lineheight)
       lineheight = lineheight + fontheight 
     end
   end
@@ -125,7 +123,22 @@ function player.inv_draw()
   draw_player_info()
   draw_item_info()
 end
-
+function player.shop_draw()
+  draw_background_inv()
+  draw_inventory()
+  player.shop.draw_inv(width, height)
+  draw_item_info(0, height/2)
+  local lineheight = 0
+  for key, value in pairs(player.shop[player.shop.pos]) do
+    if key~="img" then
+      love.graphics.print(key..": "..value, width*3/4+10, height/2+10+lineheight)
+      lineheight = lineheight + fontheight 
+    end
+  end
+  love.graphics.setColor( 0, 0, 0, 1 )
+  love.graphics.print(player.stats.money, 0, height-fontheight)
+  love.graphics.setColor( 1, 1, 1, 1 )
+end
 function player.found_chest()
   math.randomseed(os.time())
   math.random(2)
@@ -246,14 +259,10 @@ function player.check_status()
 end
 
 
-function player.shop_draw()
-  draw_background_inv()
-  draw_inventory()
-  
-end
-function player.shop()
-  shop.randomize(player.stats.level)
-end
+
+--function player.shop()
+ -- player.shop.randomize(player.stats.level)
+--end
 function player.equip()
   local t = player[player.pos]["type"]
   if t == "leaf" then
@@ -266,5 +275,18 @@ function player.equip()
     player.petal_eq = player.pos
   end
 end
-
+function player.sell_buy(sell)
+  if sell == 0 then
+    if (player.pos~=player.leaf_eq) and (player.pos~=player.petal_eq) and (player.pos~=player.pollen_eq) then
+      player.stats.money = player.stats.money + player[player.pos]["price"]
+      table.remove(player, player.pos)
+      player.pos=player.pos-1
+    end
+  else
+    if player.stats.money >= player.shop[player.shop.pos].price then
+      player.stats.money = player.stats.money-player.shop[player.shop.pos].price
+      table.insert(player,player.shop[player.shop.pos])
+    end
+  end
+end
 return player
