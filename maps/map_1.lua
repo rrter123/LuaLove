@@ -2,7 +2,7 @@ local map =
 {
   { 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101 },
   { 101, 100, 100, 110, 110, 110, 101, 101, 100, 100, 110, 110, 110, 100, 101, 101 },
-  { 101, 100, 100, 110, 110, 110, 100, 101, 100, 100, 100, 100, 100, 100, 110, 101 },
+  { 101, 100, 100, 110, 110, 110, 100, 101, 100, 100, 100, 100, 103, 100, 110, 101 },
   { 101, 100, 100, 110, 110, 100, 100, 101, 100, 100, 100, 100, 101, 100, 100, 101 },
   { 101, 100, 100, 100, 100, 100, 100, 101, 100, 100, 100, 100, 100, 100, 110, 101 },
   { 101, 100, 100, 100, 100, 100, 100, 101, 100, 100, 100, 100, 100, 100, 110, 101 },
@@ -27,6 +27,7 @@ map["img100"] = love.graphics.newImage("maps/dungeon_textures/floors/100.jpg")
 map["img101"] = love.graphics.newImage("maps/dungeon_textures/walls/101.jpg")
 map["img110"] = love.graphics.newImage("maps/dungeon_textures/floors/110.jpg")
 map["img102"] = love.graphics.newImage("maps/dungeon_textures/doors/102.jpg")
+map["img103"] = love.graphics.newImage("maps/dungeon_textures/floors/100.jpg")
 
 map["path102"] = "maps/map_2"
 map["x102"] = 2
