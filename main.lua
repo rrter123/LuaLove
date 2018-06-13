@@ -113,12 +113,12 @@ function love.keypressed(key, scancode, isrepeat)
   if (key == 'a' or key == 'left') and ((inv==1) or (shop==1)) then
     player.pos = player.pos - 1
     if player.pos == 0 then
-      player.pos = player.top
+      player.pos = #player
     end
   end
   if (key == 'd' or key == 'right') and ((inv==1) or (shop==1))then
     player.pos = player.pos + 1
-    if player.pos == player.top+1 then
+    if player.pos == #player+1 then
       player.pos = 1
     end
   end
