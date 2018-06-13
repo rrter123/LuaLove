@@ -90,7 +90,6 @@ function player.inv_draw()
   draw_item_info()
 end
 
-<<<<<<< HEAD
 function player.found_chest()
   math.randomseed(os.time())
   math.random(2)
@@ -127,7 +126,7 @@ function player.battle(number)
 end
 
 
-=======
+
 function player.shop_draw()
   draw_background_inv()
   draw_inventory()
@@ -148,5 +147,5 @@ function player.equip()
     player.petal_eq = player.pos
   end
 end
->>>>>>> 5f0a3f69f2e753aaf8918926ba423a0a1e229027
+
 return player
