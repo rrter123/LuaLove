@@ -27,6 +27,7 @@ player.petal_eq=3
 
 player.pos = 1
 
+
 player.invspace = math.floor(width/200)
 local fontheight = 25
 local font = love.graphics.newFont("font/trench100free.ttf", fontheight)
@@ -150,8 +151,8 @@ function player.gen_enemy(number)
       hp = math.floor(player.stats.hp/2),
       init_hp = math.floor(player.stats.hp/2),
       money = player.stats.level*100,
-      atk = player.stats.atk,
-      def = player.stats.def}
+      atk = player.stats.level*4,
+      def = player.stats.level*2}
   else
     enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe12.png")
     enemy.stats = {
@@ -159,8 +160,8 @@ function player.gen_enemy(number)
       hp = math.floor(player.stats.hp*1.75),
       init_hp = math.floor(player.stats.hp*1.75),
       money = math.floor(player.stats.level*100*1.25),
-      atk = math.floor(player.stats.atk*1.25),
-      def = math.floor(player.stats.def*1.25)}
+      atk = math.floor(player.stats.level*4*1.25),
+      def = math.floor(player.stats.level*2*1.25)}
   end  
   
 end
@@ -187,8 +188,10 @@ function player.check_hp()
     love.draw = battle_loss
     player.stats.xp = 0
     player.stats.money = 0
-    player.stats.hp = player.stats.level*10
   end
+end
+function player.new_hp()
+  player.stats.hp = player.stats.level*10
 end
 function player.level_up()
   player.stats.xp = player.stats.xp + enemy.stats.init_hp
@@ -248,7 +251,10 @@ function player.battle_moves(status)
 end
 
 function player.check_status()
-  if player.stats.hp <= 0 or enemy.stats.hp <= 0 then
+  print (player.stats.hp, enemy.stats.hp)
+  if player.stats.hp <= 0 then
+    return -1
+  elseif enemy.stats.hp <= 0 then
     return 1
   end
   return 0
