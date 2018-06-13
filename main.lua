@@ -71,6 +71,7 @@ end
 
 local inv = 0
 local shop = 0
+local sell = 0
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
     if shop == 1 then 
@@ -84,8 +85,9 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "e" then
     if inv == 1 then
       player.equip()
-    --if shop == 1
-      --player.sell_buy()
+    end
+    if shop == 1 then
+      player.sell_buy(sell)
     --end
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
@@ -115,7 +117,7 @@ function love.keypressed(key, scancode, isrepeat)
       if test%10 == 3 then
           --SHOP
           shop = 1
-          player.shop()
+          player["shop"].randomize(player.stats.level)
           love.draw = player.shop_draw
       end
 
@@ -124,24 +126,50 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "i" then
     if inv == 0 then
       love.draw = player.inv_draw
+      shop=0
+      sell=0
       inv = 1
     else
       love.draw = functions.draw
       inv = 0
     end
   end
+  if key == "z" then
+    if sell ==1 then
+      sell=0
+    else
+      sell=1
+    end
+  end
   if (key == 'a' or key == 'left') and ((inv==1) or (shop==1)) then
-    player.pos = player.pos - 1
-    if player.pos == 0 then
-      player.pos = #player
+    if (sell==0) then
+      player.pos = player.pos - 1
+      if player.pos <= 0 then
+        player.pos = #player
+      end
+    end
+    if (sell==1) then 
+      player.shop.pos = player.shop.pos - 1
+      if player.shop.pos <= 0 then
+        player.shop.pos = #player.shop
+      end
     end
   end
   if (key == 'd' or key == 'right') and ((inv==1) or (shop==1))then
-    player.pos = player.pos + 1
-    if player.pos == #player+1 then
-      player.pos = 1
+    if (sell==0) then
+      player.pos = player.pos + 1
+      if player.pos >= #player+1 then
+        player.pos = 1
+      end
+    end
+    if (sell==1) then
+      player.shop.pos = player.shop.pos + 1
+      if player.shop.pos >= #player.shop+1 then
+        player.shop.pos = 1
+      end
     end
   end
+  
 end
 
 

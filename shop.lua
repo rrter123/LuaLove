@@ -8,10 +8,10 @@ local shop = {
 local damage = {
   "fire", "water", "earth", "wind"
   }
-
+shop.pos = 1
 function shop.randomize(lvl)
   for key, val in ipairs(shop) do
-    shop[key]["price"] = math.random(math.floor(lvl*0.8), math.floor(lvl*1.2))
+    shop[key]["price"] = math.random(math.floor(lvl*2), math.floor(lvl*3))
     if val.type == "pollen" then
       shop[key]["damage"] = damage[math.random(1, #damage)]
       shop[key]["atk"] = 5 + math.random(math.floor(lvl*0.8), math.floor(lvl*1.2))
@@ -25,4 +25,13 @@ function shop.randomize(lvl)
   end
 end
 
+function shop.draw_inv(width, height, pos)
+  for i, val in ipairs(shop) do
+    love.graphics.draw(val.img, width/2+100*((i-1)%math.floor(width/200)), 100* (math.floor((i-1)/math.floor(width/200))))
+  
+    if i == shop.pos then
+      love.graphics.rectangle("line", width/2+100*((i-1)%math.floor(width/200)), 100*(math.floor((i-1)/math.floor(width/200))), 100, 100)
+    end
+  end
+end
 return shop
