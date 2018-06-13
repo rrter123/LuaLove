@@ -15,6 +15,10 @@ local entities =
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}
   
+--treasure chests number 32
+--weak enemy 12
+--strong enemy 22
+
 
 entities["img11"] = love.graphics.newImage("entities/rocks/boulder.png")
 
