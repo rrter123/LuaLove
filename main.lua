@@ -76,13 +76,20 @@ local bat_end = 0
 local sell = 0
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
+
     if shop == 1 then 
       love.draw = functions.draw
-      shop=0
-    end
-    if battle == 1 and bat_end == 1 then
+      inv = 0
+      shop = 0
+      sell = 0
+    elseif battle == 1 and bat_end == 1 then
       love.draw = functions.draw
       battle = 0
+    elseif inv == 1 then
+      love.draw = functions.draw
+      inv = 0
+      shop = 0
+      sell = 0
     else
       love.window.close()
       love.event.quit()
@@ -117,6 +124,7 @@ function love.keypressed(key, scancode, isrepeat)
       if test%10 == 3 then
           --SHOP
           shop = 1
+          inv=0
           player["shop"].randomize(player.stats.level)
           love.draw = player.shop_draw
       end

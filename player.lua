@@ -2,10 +2,9 @@ local love = require ("love")
 local sh = require("shop")
 
 local player = {
-  {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png"), price = 5},
-  {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png"), price = 5},
-  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png"), price = 5},
-  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png"), price = 5}
+  {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png"), price = 2},
+  {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png"), price = 2},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png"), price = 2}
   }
 width, height = love.window.getDesktopDimensions()
 player.shop = sh
@@ -275,9 +274,12 @@ end
 function player.sell_buy(sell)
   if sell == 0 then
     if (player.pos~=player.leaf_eq) and (player.pos~=player.petal_eq) and (player.pos~=player.pollen_eq) then
+      if player.pollen_eq>player.pos then player.pollen_eq = player.pollen_eq-1 end
+      if player.leaf_eq>player.pos then player.leaf_eq = player.leaf_eq-1 end
+      if player.petal_eq>player.pos then player.petal_eq = player.petal_eq-1 end
       player.stats.money = player.stats.money + player[player.pos]["price"]
       table.remove(player, player.pos)
-      player.pos=player.pos-1
+      player.pos=1
     end
   else
     if player.stats.money >= player.shop[player.shop.pos].price then
