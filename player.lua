@@ -1,6 +1,6 @@
 local love = require ("love")
-local math = require("math")
-
+--local math = require("math")
+local shop = require("shop")
 
 local player = {
   {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png")},
@@ -94,7 +94,9 @@ function player.shop_draw()
   draw_inventory()
   
 end
-
+function player.shop()
+  shop.randomize(player.stats.level)
+end
 function player.equip()
   local t = player[player.pos]["type"]
   if t == "leaf" then

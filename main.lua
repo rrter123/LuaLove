@@ -1,6 +1,6 @@
 local current_map = require("maps/map_1")
 local current_entities=require("maps/entities_1")
-local math = require("math")
+--local math = require("math")
 local check = require("checks")
 local maps = require("maps")
 local socket = require("socket")
@@ -96,6 +96,7 @@ function love.keypressed(key, scancode, isrepeat)
         if test%10 == 3 then
           --SHOP
           shop = 1
+          player.shop()
           love.draw = player.shop_draw
         end
       end

@@ -1,4 +1,4 @@
-math = require("math")
+--math = require("math")
 checks = {}
 
 function checks.can_go_down(posx, posy, currentmap)
