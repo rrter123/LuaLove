@@ -6,14 +6,21 @@ local player = {
   {type = "leaf", atk = 2, img = love.graphics.newImage("weapons/leaf-icon-20.png")},
   {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png")},
   {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
-  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png")}
+  {type = "leaf", atk=3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-17.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")},
+  {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png")}
   }
 width, height = love.window.getDesktopDimensions()
 
 player.person_image = love.graphics.newImage("flower.png")
 player.player_x = 2 -- < texture_size_x
 player.player_y = 2 -- < texture_size_y
-player.top = 4 -- !!!!!!Amount of stuff
+player.top = 11 -- !!!!!!Amount of stuff
 player.stats = {
 atk = 1,
 def = 1,
@@ -30,10 +37,10 @@ player.petal_eq=3
 player.pos = 1
 player.invspace = math.floor(width/200)
 local fontheight = 50
-local font = love.graphics.newFont("font/trench100free.ttf", 50)
+local font = love.graphics.newFont("font/trench100free.ttf", 25)
 love.graphics.setFont(font)
 
-local function draw_background()
+local function draw_background_inv()
   love.graphics.setColor( 0.9, 0.9, 0.9, 1 )
   love.graphics.rectangle( "fill", 0, 0, width/2, height )
   love.graphics.setColor( 0.6, 0.6, 0.6, 1 )
@@ -61,23 +68,43 @@ local function draw_item_info()
     end
   end
 end
-
-function player.inv_draw()
-  draw_background()
+local function draw_inventory()
   love.graphics.setColor( 0.9, 1, 0.9, 0.4 )
-  love.graphics.rectangle( "fill", 100*(player.leaf_eq-1%player.invspace), 100*(math.floor(player.leaf_eq/player.invspace)), 100, 100)
-  love.graphics.rectangle( "fill", 100*(player.pollen_eq-1%player.invspace), 100*(math.floor(player.pollen_eq/player.invspace)), 100, 100)
-  love.graphics.rectangle( "fill", 100*(player.petal_eq-1%player.invspace), 100*(math.floor(player.petal_eq/player.invspace)), 100, 100)
-  
+  love.graphics.rectangle( "fill", 100*((player.leaf_eq-1)%player.invspace), 100*(math.floor((player.leaf_eq-1)/player.invspace)), 100, 100)
+  love.graphics.rectangle( "fill", 100*((player.pollen_eq-1)%player.invspace), 100*(math.floor((player.pollen_eq-1)/player.invspace)), 100, 100)
+  love.graphics.rectangle( "fill", 100*((player.petal_eq-1)%player.invspace), 100*(math.floor((player.petal_eq-1)/player.invspace)), 100, 100)
   love.graphics.setColor( 1, 1, 1, 1 )
   for i, val in ipairs(player) do
-    love.graphics.draw(val.img, 100*(i-1%player.invspace), 100* (math.floor(i/player.invspace)))
+    love.graphics.draw(val.img, 100*((i-1)%player.invspace), 100* (math.floor((i-1)/player.invspace)))
     if i == player.pos then
-      love.graphics.rectangle("line", 100*(i-1%player.invspace), 100*(math.floor(i/player.invspace)), 100, 100)
+      love.graphics.rectangle("line", 100*((i-1)%player.invspace), 100*(math.floor((i-1)/player.invspace)), 100, 100)
     end
   end
+end
+
+function player.inv_draw()
+  draw_background_inv()
+  draw_inventory()
   draw_player_info()
   draw_item_info()
 end
 
+function player.shop_draw()
+  draw_background_inv()
+  draw_inventory()
+  
+end
+
+function player.equip()
+  local t = player[player.pos]["type"]
+  if t == "leaf" then
+    player.leaf_eq = player.pos
+  end
+  if t == "pollen" then
+    player.pollen_eq = player.pos
+  end
+  if t == "petal" then
+    player.petal_eq = player.pos
+  end
+end
 return player

@@ -70,30 +70,35 @@ end
 
 
 local inv = 0
+local shop = 0
 function love.keypressed(key, scancode, isrepeat)
-  
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
-    love.window.close()
-    love.event.quit()
+    if shop == 1 then 
+      love.draw = functions.draw
+      shop=0
+    else
+      love.window.close()
+      love.event.quit()
+    end
   end
   if key == "e" then
     if inv == 1 then
-      local t = player[player.pos]["type"]
-      if t == "leaf" then
-        player.leaf_eq = player.pos
-      end
-      if t == "pollen" then
-        player.pollen_eq = player.pos
-      end
-      if t == "petal" then
-        player.petal_eq = player.pos
-      end
+      player.equip()
+    --if shop == 1
+      --player.sell_buy()
+    --end
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
       if test ~= 0 then
         if test%10 == 2 then
           load_map(test)
-      end  end
+        end  
+        if test%10 == 3 then
+          --SHOP
+          shop = 1
+          love.draw = player.shop_draw
+        end
+      end
     end
   end
   if key == "i" then
@@ -105,20 +110,20 @@ function love.keypressed(key, scancode, isrepeat)
       inv = 0
     end
   end
-  if (key == 'a' or key == 'left') and (inv==1) then
+  if (key == 'a' or key == 'left') and ((inv==1) or (shop==1)) then
     player.pos = player.pos - 1
     if player.pos == 0 then
       player.pos = player.top
     end
   end
-  if (key == 'd' or key == 'right') and (inv==1) then
+  if (key == 'd' or key == 'right') and ((inv==1) or (shop==1))then
     player.pos = player.pos + 1
     if player.pos == player.top+1 then
       player.pos = 1
     end
   end
-  
 end
+
 
 functions = {}
 
