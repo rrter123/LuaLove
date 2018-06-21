@@ -24,6 +24,7 @@ maxxp = 10
 player.leaf_eq = 1
 player.pollen_eq = 2
 player.petal_eq=3
+player.dead = 0
 
 player.pos = 1
 
@@ -163,6 +164,7 @@ function player.gen_enemy(number)
       atk = math.floor(player.stats.level*4*1.25),
       def = math.floor(player.stats.level*2*1.25)}
   end  
+  enemy.dead = 0
   
 end
 function player.battle_draw()
@@ -186,12 +188,14 @@ end
 function player.check_hp()
   if player.stats.hp <= 0 then
     love.draw = battle_loss
+    player.dead = 1
     player.stats.xp = 0
     player.stats.money = 0
   end
 end
-function player.new_hp()
+function player.new_life()
   player.stats.hp = player.stats.level*10
+  player.stats.dead = 0
 end
 function player.level_up()
   player.stats.xp = player.stats.xp + enemy.stats.init_hp
@@ -242,6 +246,7 @@ function player.battle_moves(status)
     end
     if enemy.stats.hp <= 0 then 
       love.draw = battle_win
+      enemy.dead = 1
       player.level_up()
     end
     player.check_hp()
@@ -251,10 +256,9 @@ function player.battle_moves(status)
 end
 
 function player.check_status()
-  print (player.stats.hp, enemy.stats.hp)
-  if player.stats.hp <= 0 then
+  if player.dead == 1 then
     return -1
-  elseif enemy.stats.hp <= 0 then
+  elseif enemy.dead == 1 then
     return 1
   end
   return 0

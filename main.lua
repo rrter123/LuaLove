@@ -68,20 +68,26 @@ function load_map(number)
   set_offset()
 end
 
-
+--[[
 local inv = 0
 local shop = 0
 local battle = 0
 local bat_end = 0 --0 in progress, --1 won -1 lost
+--]]
+local mode = 0
 local sell = 0
+-- 0 default mode
+-- 1 inventory  mode
+-- 2 shop mode
+-- 4 battle mode
+
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
-    if shop == 1 then 
+    if mode == 1 or mode == 2 then 
       love.draw = functions.draw
-      inv = 0
-      shop = 0
-      sell = 0
-    elseif battle == 1 then
+      mode = 0
+    elseif mode == 3 then
+      local bat_end = player.check_status()
       if bat_end == -1 then
         current_map = require("maps/map_1")
         current_entities = require("maps/entities_1")
@@ -89,29 +95,22 @@ function love.keypressed(key, scancode, isrepeat)
         player.player_y = 2
         set_offset()
         love.draw = functions.draw
-        battle = 0
-        bat_end = 0
-        player.new_hp()
+        mode = 0
+        player.new_life()
       elseif bat_end == 1 then
         love.draw = functions.draw
-        battle = 0
-        bat_end = 0
+        mode = 0
       end
-    elseif inv == 1 then
-      love.draw = functions.draw
-      inv = 0
-      shop = 0
-      sell = 0
     else
       love.window.close()
       love.event.quit()
     end
   end
   if key == "e" then
-    if inv == 1 then
+    if mode == 1 then
       player.equip()
     end
-    if shop == 1 then
+    if mode == 2 then
       player.sell_buy(sell)
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
@@ -126,7 +125,7 @@ function love.keypressed(key, scancode, isrepeat)
           player.found_chest()
           current_entities[y][x] = 0
         elseif test == 22 or test == 12 then
-          battle = 1
+          mode = 3
           player.gen_enemy(test)
           love.draw = player.battle_draw
           current_entities[y][x] = 0
@@ -134,8 +133,7 @@ function love.keypressed(key, scancode, isrepeat)
       end
       if test%10 == 3 then
           --SHOP
-          shop = 1
-          inv=0
+          mode = 1
           player["shop"].randomize(player.stats.level)
           love.draw = player.shop_draw
       end
@@ -143,58 +141,54 @@ function love.keypressed(key, scancode, isrepeat)
     end
   end
   if key == "i" then
-    if inv == 0 then
+    if mode == 0 then
       love.draw = player.inv_draw
-      shop=0
-      sell=0
-      inv = 1
+      mode = 1
     else
       love.draw = functions.draw
-      inv = 0
+      mode = 0
     end
   end
   if key == "z" then
-    if sell ==1 then
+    if sell == 1 then
       sell=0
     else
       sell=1
     end
   end
-  if (key == 'a' or key == 'left') and ((inv==1) or (shop==1)) then
-    if (sell==0) then
+  if (key == 'a' or key == 'left') and (mode == 1 or mode == 2) then
+    if sell == 0 then
       player.pos = player.pos - 1
       if player.pos <= 0 then
         player.pos = #player
       end
     end
-    if (sell==1) then 
+    if sell == 1 then 
       player.shop.pos = player.shop.pos - 1
       if player.shop.pos <= 0 then
         player.shop.pos = #player.shop
       end
     end
   end
-  if (key == 'd' or key == 'right') and ((inv==1) or (shop==1))then
-    if (sell==0) then
+  if (key == 'd' or key == 'right') and (mode == 1 or mode == 2)then
+    if sell==0 then
       player.pos = player.pos + 1
       if player.pos >= #player+1 then
         player.pos = 1
       end
     end
-    if (sell==1) then
+    if sell==1 then
       player.shop.pos = player.shop.pos + 1
       if player.shop.pos >= #player.shop+1 then
         player.shop.pos = 1
       end
     end
   end
-  if key == '1' and battle == 1 then
+  if key == '1' and mode == 3 then
     player.battle_moves(1)
-    bat_end = player.check_status()
   end
-  if key == '2' and battle == 1 then
+  if key == '2' and mode == 3 then
     player.battle_moves(2)
-    bat_end = player.check_status()
   end
 end
 
@@ -237,6 +231,7 @@ function functions.update(dt)
    if (love.keyboard.isDown("up") or love.keyboard.isDown("w")) 
    and check.can_go_up(player.player_x, player.player_y, current_map)
    and check.can_go_up(player.player_x, player.player_y, current_entities)
+   and mode == 0
    then
     offset_y =offset_y - 100
     player.player_y = player.player_y - 1
@@ -246,6 +241,7 @@ function functions.update(dt)
   if (love.keyboard.isDown("down") or love.keyboard.isDown("s")) 
   and check.can_go_down(player.player_x, player.player_y, current_map)
   and check.can_go_down(player.player_x, player.player_y, current_entities)
+  and mode == 0
   then
     offset_y =offset_y + 100
     player.player_y =player.player_y +1
@@ -255,6 +251,7 @@ function functions.update(dt)
   if (love.keyboard.isDown("left") or love.keyboard.isDown("a")) 
   and check.can_go_left(player.player_x, player.player_y, current_map)
   and check.can_go_left(player.player_x, player.player_y, current_entities)
+  and mode == 0
   then
     offset_x =offset_x - 100
     player.player_x =player.player_x -1
@@ -264,6 +261,7 @@ function functions.update(dt)
   if (love.keyboard.isDown("right") or love.keyboard.isDown("d")) 
   and check.can_go_right(player.player_x, player.player_y, current_map) 
   and check.can_go_right(player.player_x, player.player_y, current_entities)
+  and mode == 0
   then
     offset_x =offset_x + 100
     player.player_x =player.player_x +1
