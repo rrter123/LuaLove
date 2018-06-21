@@ -25,31 +25,15 @@ function set_offset()
   offset_y = -height/2+player.player_y*100-texture_size_y/2
 end
 
+--checks if map already exists
 function exists(path, number)
    local ok, err, code = os.rename(path..'.lua', path..'.lua')
    if not ok then
       if code == 13 then
         print("file exists")
          -- Permission denied, but it exists
-      end
-      if code == 2 then
-        if number == 212 then
-          maps.gen_map(30,30,1,current_map["x"..number],current_map["y"..number] )
-        else
+      elseif code == 2 then --map doesn't exists, we have to generate it
           maps.gen_map(30,30,(math.floor((number/100)%10)+1),current_map["x"..number],current_map["y"..number])
-        end
-      end
-    else
-      if (number/100 > 100 and number%100 == 2) or number == 212 then
-        player.player_x = current_map["x"..number]
-        player.player_y = current_map["y"..number]
-        current_map = require(path)
-        if number/100 > 100 then
-          maps.update_entities(current_map, math.floor((number/100)%10)+1)
-        else
-          maps.update_entities(current_map, 1)
-        end
-        return true
       end
     end
 end
@@ -59,21 +43,17 @@ function load_map(number)
   local path = current_map["path"..number]
   local answer = exists(path,number)
   local path_e = current_entities["path"..number]
-  if answer == nil then
-    player.player_x = current_map["x"..number]
-    player.player_y = current_map["y"..number]
-    current_map = require(path)
+  player.player_x = current_map["x"..number]
+  player.player_y = current_map["y"..number]
+  current_map = require(path)
+  if number/100 > 100 then
+      maps.update_entities(current_map, math.floor((number/100)%10)+1, current_map["x"..number], current_map["y"..number])
   end
   current_entities = require(path_e)
   set_offset()
 end
 
---[[
-local inv = 0
-local shop = 0
-local battle = 0
-local bat_end = 0 --0 in progress, --1 won -1 lost
---]]
+
 local mode = 0
 local sell = 0
 -- 0 default mode

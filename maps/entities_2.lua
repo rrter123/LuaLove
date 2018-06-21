@@ -21,6 +21,6 @@ entities["img21"] = love.graphics.newImage("entities/enemies/pisilohe10.png")
 entities["img31"] = love.graphics.newImage("entities/enemies/pisilohe12.png")
 
 entities["path202"] = "maps/entities_1"
-entities["path212"] = "maps/entities_101"
+entities["path10012"] = "maps/entities_101"
 
 return entities
