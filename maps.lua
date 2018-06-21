@@ -5,11 +5,12 @@ local map_nr = 3
 
 maps = {}
 
+
+--random seed 
+math.randomseed(os.time())
+math.random(2)
+
 --function formating table to string
-
-
-
-
 local function tostr(map)
   str= {}
   for i=1, #map do
@@ -64,8 +65,6 @@ end
 
 
 function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and number of map we want to generate
-  math.randomseed(os.time())
-  math.random(2)
   local map = {}
   local visited = {}
   for i=1, width do
@@ -195,17 +194,14 @@ function maps.gen_map(width, length, map_nr, doorx,doory) --width, length and nu
   new_map:flush()
   new_map:close()
 
---create new .lua file with entities
-  maps.update_entities(map, map_nr)
+
 
 end
 
 --create or update .lua file with entities
 
-function maps.update_entities(map, map_nr)
+function maps.update_entities(map, map_nr, player_x, player_y)
   local a = os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil
-  math.randomseed(os.time())
-  math.random(2)
   local entities = {}
   for i=1, #map do
     entities[#entities+1] = {}
@@ -219,12 +215,11 @@ function maps.update_entities(map, map_nr)
    local enemy_1 = math.random(20)
    --random number of enemy_2
   local enemy_2 = math.random(10)
-  print (chests,enemy_1,enemy_2)
   
   for i=1, chests do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 do
+    while map[y][x] % 10 ~= 0 or (y == player_y and x == player_x) do
         x = math.random(#map[1])
         y = math.random(#map)
     end
@@ -233,7 +228,7 @@ function maps.update_entities(map, map_nr)
   for i=1, enemy_1 do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 do
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or  (y == player_y and x == player_x)  do
       x = math.random(#map[1])
       y = math.random(#map)
     end
@@ -242,7 +237,7 @@ function maps.update_entities(map, map_nr)
   for i=1, enemy_2 do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 do
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or  (y == player_y and x == player_x) do
       x = math.random(#map[1])
       y = math.random(#map)
     end
@@ -253,7 +248,7 @@ function maps.update_entities(map, map_nr)
   new_entities:write("local entities =\n"..tostr(entities).."\n\n")
   new_entities:write('entities["img12"] = love.graphics.newImage("entities/enemies/pisilohe10.png")\n')
   new_entities:write('entities["img22"] = love.graphics.newImage("entities/enemies/pisilohe12.png")\n')
-    new_entities:write('entities["img32"] = love.graphics.newImage("entities/chests/chest.png")\n')
+  new_entities:write('entities["img32"] = love.graphics.newImage("entities/chests/chest.png")\n')
   new_entities:write('entities["path'..(10000+map_nr*100+12)..'"] = "maps/entities_2"\n')
   new_entities:write('entities["path'..(10000+map_nr*100+2)..'"] = "maps/entities_10'..(map_nr+1)..'"\n')
   new_entities:write("return entities")
