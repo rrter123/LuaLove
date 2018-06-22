@@ -46,7 +46,7 @@ function load_map(number)
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
   current_map = require(path)
-  if number/100 > 100 then
+  if number/100 > 100 and number%100 ~= 12 then
       maps.update_entities(current_map, math.floor((number/100)%10)+1, current_map["x"..number], current_map["y"..number])
   end
   current_entities = require(path_e)
@@ -55,18 +55,18 @@ end
 
 
 local mode = 0
-local sell = 0
 -- 0 default mode
 -- 1 inventory  mode
 -- 2 shop mode
+-- 3 sell mode
 -- 4 battle mode
 
 function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then --Pressing Escape closes the window and then schedules the program to close
-    if mode == 1 or mode == 2 then 
+    if mode == 1 or mode == 2 or mode == 3 then 
       love.draw = functions.draw
       mode = 0
-    elseif mode == 3 then
+    elseif mode == 4 then
       local bat_end = player.check_status()
       if bat_end == -1 then
         current_map = require("maps/map_1")
@@ -90,8 +90,8 @@ function love.keypressed(key, scancode, isrepeat)
     if mode == 1 then
       player.equip()
     end
-    if mode == 2 then
-      player.sell_buy(sell)
+    if mode == 2 or mode == 3 then
+      player.sell_buy(mode)
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
       if test ~= 0 then
@@ -105,7 +105,7 @@ function love.keypressed(key, scancode, isrepeat)
           player.found_chest()
           current_entities[y][x] = 0
         elseif test == 22 or test == 12 then
-          mode = 3
+          mode = 4
           player.gen_enemy(test)
           love.draw = player.battle_draw
           current_entities[y][x] = 0
@@ -113,7 +113,7 @@ function love.keypressed(key, scancode, isrepeat)
       end
       if test%10 == 3 then
           --SHOP
-          mode = 1
+          mode = 2
           player["shop"].randomize(player.stats.level)
           love.draw = player.shop_draw
       end
@@ -124,50 +124,48 @@ function love.keypressed(key, scancode, isrepeat)
     if mode == 0 then
       love.draw = player.inv_draw
       mode = 1
-    else
+    elseif mode == 1 then
       love.draw = functions.draw
       mode = 0
     end
   end
   if key == "z" then
-    if sell == 1 then
-      sell=0
+    if mode == 3 then
+      mode = 2
     else
-      sell=1
+      mode = 3
     end
   end
-  if (key == 'a' or key == 'left') and (mode == 1 or mode == 2) then
-    if sell == 0 then
+  if (key == 'a' or key == 'left') and (mode == 1 or mode == 2 or mode == 3) then
+    if mode == 1 or mode == 2 then
       player.pos = player.pos - 1
       if player.pos <= 0 then
         player.pos = #player
       end
-    end
-    if sell == 1 then 
+    else 
       player.shop.pos = player.shop.pos - 1
       if player.shop.pos <= 0 then
         player.shop.pos = #player.shop
       end
     end
   end
-  if (key == 'd' or key == 'right') and (mode == 1 or mode == 2)then
-    if sell==0 then
+  if (key == 'd' or key == 'right') and (mode == 1 or mode == 2 or mode == 3)then
+    if mode == 1 or mode == 2 then
       player.pos = player.pos + 1
       if player.pos >= #player+1 then
         player.pos = 1
       end
-    end
-    if sell==1 then
+    else
       player.shop.pos = player.shop.pos + 1
       if player.shop.pos >= #player.shop+1 then
         player.shop.pos = 1
       end
     end
   end
-  if key == '1' and mode == 3 then
+  if key == '1' and mode == 4 then
     player.battle_moves(1)
   end
-  if key == '2' and mode == 3 then
+  if key == '2' and mode == 4 then
     player.battle_moves(2)
   end
 end
