@@ -201,7 +201,8 @@ end
 --create or update .lua file with entities
 
 function maps.update_entities(map, map_nr, player_x, player_y)
-  local a = os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil
+  local a = os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil 
+  
   local entities = {}
   for i=1, #map do
     entities[#entities+1] = {}
@@ -246,8 +247,8 @@ function maps.update_entities(map, map_nr, player_x, player_y)
   
   local new_entities = io.open("maps/entities_"..(100+map_nr)..".lua","w")
   new_entities:write("local entities =\n"..tostr(entities).."\n\n")
-  new_entities:write('entities["img12"] = love.graphics.newImage("entities/enemies/pisilohe10.png")\n')
-  new_entities:write('entities["img22"] = love.graphics.newImage("entities/enemies/pisilohe12.png")\n')
+  new_entities:write('entities["img12"] = love.graphics.newImage("entities/enemies/goat1.png")\n')
+  new_entities:write('entities["img22"] = love.graphics.newImage("entities/enemies/goat2.png")\n')
   new_entities:write('entities["img32"] = love.graphics.newImage("entities/chests/chest.png")\n')
   new_entities:write('entities["path'..(10000+map_nr*100+12)..'"] = "maps/entities_2"\n')
   new_entities:write('entities["path'..(10000+map_nr*100+2)..'"] = "maps/entities_10'..(map_nr+1)..'"\n')

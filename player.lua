@@ -152,7 +152,7 @@ end
 function player.gen_enemy(number)
   local damage = { "fire", "water", "earth", "wind" }
   if number == 12 then --weak enemy
-    enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe10.png")
+    enemy.enemy_image = love.graphics.newImage("entities/enemies/goat1.png")
     enemy.stats = {
       level = math.random(player.stats.level),
       hp = math.random(player.stats.maxhp),
@@ -160,7 +160,7 @@ function player.gen_enemy(number)
       atk = math.random(player.stats.atk),
       def = math.random(player.stats.def)}
   else --stronger enemy
-    enemy.enemy_image = love.graphics.newImage("entities/enemies/pisilohe12.png")
+    enemy.enemy_image = love.graphics.newImage("entities/enemies/goat2.png")
     enemy.stats = {
       level = math.random(player.stats.level*2),
       hp = math.random(player.stats.maxhp*2),
