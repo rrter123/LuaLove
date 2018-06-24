@@ -203,7 +203,7 @@ function player.new_life()
   player.stats.dead = 0
 end
 function player.level_up()
-  player.stats.xp = player.stats.xp + enemy.stats.init_hp
+  player.stats.xp = player.stats.xp + enemy.stats.init_hp*enemy.stats.lvl
   if player.stats.xp > player.stats.maxxp then
     player.stats.level = player.stats.level + 1
     player.stats.atk = player.stats.atk + 1
