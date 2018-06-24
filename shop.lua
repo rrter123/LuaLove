@@ -1,5 +1,5 @@
 --local math = require("math")
-math.randomseed(os.time())
+--math.randomseed(os.time())
 local shop = {
   {type = "pollen", damage = "fire", atk = 5, img = love.graphics.newImage("weapons/bullet-png-7.png"), price = 5},
   {type = "petal", def = 3, img = love.graphics.newImage("weapons/flower-icon--icon-search-engine-6.png"), price = 5},
@@ -14,13 +14,13 @@ function shop.randomize(lvl)
     shop[key]["price"] = math.random(math.floor(lvl*2), math.floor(lvl*3))
     if val.type == "pollen" then
       shop[key]["damage"] = damage[math.random(1, #damage)]
-      shop[key]["atk"] = 5 + math.random(math.floor(lvl*0.8), math.floor(lvl*1.2))
+      shop[key]["atk"] = 5 + math.random(math.floor(lvl*0.5), math.floor(lvl*1.5))
     end
     if val.type == "petal" then
-      shop[key]["def"] = 5 + math.random(math.floor(lvl), math.floor(lvl*1.5))
+      shop[key]["def"] = 5 + math.random(math.floor(lvl), math.floor(lvl*1.8))
     end
     if val.type == "leaf" then
-      shop[key]["atk"] = 5 + math.random(math.floor(lvl), math.floor(lvl*1.5))
+      shop[key]["atk"] = 5 + math.random(math.floor(lvl), math.floor(lvl*1.8))
     end 
   end
 end

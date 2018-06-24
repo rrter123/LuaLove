@@ -209,7 +209,7 @@ function player.level_up()
     player.stats.atk = player.stats.atk + 1
     player.stats.def = player.stats.def + 1
     player.stats.xp = 0
-    player.stats.maxxp = player.stats.maxxp*1.25
+    player.stats.maxxp = math.floor(player.stats.maxxp*1.5)
     player.stats.maxhp = player.stats.level*10
     player.stats.hp = player.stats.maxhp
     player.stats.money = player.stats.money + enemy.stats.money
