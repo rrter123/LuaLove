@@ -20,7 +20,7 @@ local entities =
 --strong enemy 22
 
 
-entities["img11"] = love.graphics.newImage("entities/rocks/boulder.png")
+entities["img11"] = love.graphics.newImage("entities/watercolor_bee.png")
 
 entities["path102"] = "maps/entities_2"
 
