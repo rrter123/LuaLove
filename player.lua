@@ -203,7 +203,7 @@ function player.check_hp()
 end
 function player.new_life()
   player.stats.hp = player.stats.level*10
-  player.stats.dead = 0
+  player.dead = 0
 end
 function player.level_up()
   player.stats.xp = player.stats.xp + enemy.stats.init_hp*enemy.stats.level
@@ -240,7 +240,7 @@ function player.battle_moves(status)
   if enemy.stats.hp > 0 then --counterattack
     diff = enemy.stats.atk - defense
     if diff < 0 then
-      player.stats.hp = player.stats.hp + enemy.stats.atk
+      player.stats.hp = player.stats.hp  - enemy.stats.atk
     else
       enemy.stats.hp = enemy.stats.hp - diff
     end
