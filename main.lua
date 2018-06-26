@@ -41,13 +41,13 @@ end
 
 function load_map(number)
   local path = current_map["path"..number]
-  local answer = exists(path,number)
   local path_e = current_entities["path"..number]
+  exists(path,number)
   player.player_x = current_map["x"..number]
   player.player_y = current_map["y"..number]
   current_map = require(path)
   if number/100 > 100 and number%100 ~= 12 then
-      maps.update_entities(current_map, math.floor((number/100)%10)+1, current_map["x"..number], current_map["y"..number])
+      maps.update_entities(current_map, math.floor((number/100)%10)+1, player.player_x, player.player_y)
   end
   current_entities = require(path_e)
   set_offset()

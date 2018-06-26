@@ -220,7 +220,10 @@ function maps.update_entities(map, map_nr, player_x, player_y)
   for i=1, chests do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 or (y == player_y and x == player_x) do
+    while map[y][x] % 10 ~= 0 or 
+          ((y == player_y or y == player_y + 2 or y == player_y -2) and 
+          (x == player_x or x == player_x + 2 or x == player_x - 2))
+    do
         x = math.random(#map[1])
         y = math.random(#map)
     end
@@ -229,7 +232,10 @@ function maps.update_entities(map, map_nr, player_x, player_y)
   for i=1, enemy_1 do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or  (y == player_y and x == player_x)  do
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or 
+          ((y == player_y or y == player_y + 2 or y == player_y -2) and 
+          (x == player_x or x == player_x + 2 or x == player_x - 2))
+    do
       x = math.random(#map[1])
       y = math.random(#map)
     end
@@ -238,7 +244,10 @@ function maps.update_entities(map, map_nr, player_x, player_y)
   for i=1, enemy_2 do
     local x = math.random(#map[1])
     local y = math.random(#map)
-    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or  (y == player_y and x == player_x) do
+    while map[y][x] % 10 ~= 0 or entities[y][x] ~= 0 or  
+          ((y == player_y or y == player_y + 2 or y == player_y -2) and 
+          (x == player_x or x == player_x + 2 or x == player_x - 2))
+    do
       x = math.random(#map[1])
       y = math.random(#map)
     end

@@ -145,6 +145,25 @@ function player.shop_draw()
   love.graphics.print(player.stats.money, 0, height-fontheight)
   love.graphics.setColor( 1, 1, 1, 1 )
 end
+
+function player.battle_draw()
+  draw_background_battle()
+  draw_player_and_enemy_info()
+  draw_battle()
+end
+
+local function battle_loss()
+  love.graphics.setColor( 1, 1, 1, 1 )
+  love.graphics.print( "YOU LOSE", width/2-10, height/2-10)
+  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
+end
+
+local function battle_win()
+  love.graphics.setColor( 1, 1, 1, 1 )
+  love.graphics.print( "YOU WIN", width/2-10, height/2-10)
+  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
+end
+
 function player.found_chest()
   local money = math.random(20)
   player.stats.money = player.stats.money + money*10
@@ -172,23 +191,7 @@ function player.gen_enemy(number)
   enemy.stats.init_hp = enemy.stats.hp
   enemy.weakness = damage[math.random(4)]  
 end
-function player.battle_draw()
-  draw_background_battle()
-  draw_player_and_enemy_info()
-  draw_battle()
-end
 
-local function battle_loss()
-  love.graphics.setColor( 1, 1, 1, 1 )
-  love.graphics.print( "YOU LOSE", width/2-10, height/2-10)
-  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
-end
-
-local function battle_win()
-  love.graphics.setColor( 1, 1, 1, 1 )
-  love.graphics.print( "YOU WIN", width/2-10, height/2-10)
-  love.graphics.print("Press Escape to Continue", width/2, height- height/10)
-end
 
 function player.check_hp()
   if player.stats.hp <= 0 then
@@ -200,10 +203,10 @@ function player.check_hp()
 end
 function player.new_life()
   player.stats.hp = player.stats.level*10
-  player.stats.dead = 0
+  player.dead = 0
 end
 function player.level_up()
-  player.stats.xp = player.stats.xp + enemy.stats.init_hp
+  player.stats.xp = player.stats.xp + enemy.stats.init_hp*enemy.stats.level
   if player.stats.xp > player.stats.maxxp then
     player.stats.level = player.stats.level + 1
     player.stats.atk = player.stats.atk + 1
@@ -236,10 +239,10 @@ function player.battle_moves(status)
   end
   if enemy.stats.hp > 0 then --counterattack
     diff = enemy.stats.atk - defense
-    if diff > 0 then
-      player.stats.hp = player.stats.hp - enemy.stats.atk
+    if diff < 0 then
+      player.stats.hp = player.stats.hp  - enemy.stats.atk
     else
-      enemy.stats.hp = enemy.stats.hp + diff
+      enemy.stats.hp = enemy.stats.hp - diff
     end
   end
   if enemy.stats.hp <= 0 then
