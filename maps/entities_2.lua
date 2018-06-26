@@ -17,8 +17,6 @@ local entities =
   
 
 entities["img11"] = love.graphics.newImage("entities/rocks/boulder.png")
---entities["img21"] = love.graphics.newImage("entities/enemies/pisilohe10.png")
---entities["img34"] = love.graphics.newImage("entities/enemies/pisilohe12.png")
 
 entities["path202"] = "maps/entities_1"
 entities["path10002"] = "maps/entities_101"
