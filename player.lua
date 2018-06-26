@@ -1,5 +1,6 @@
 local love = require ("love")
 local sh = require("shop")
+--local table = require("table")
 math.randomseed(os.time())
 math.random(2)
 
@@ -280,6 +281,12 @@ function player.equip()
     player.petal_eq = player.pos
   end
 end
+function t_copy(t)
+  local u = { }
+  for k, v in pairs(t) do u[k] = v end
+  return u
+end
+
 function player.sell_buy(mode)
   if mode == 2 then
     if (player.pos~=player.leaf_eq) and (player.pos~=player.petal_eq) and (player.pos~=player.pollen_eq) then
@@ -293,7 +300,7 @@ function player.sell_buy(mode)
   else
     if player.stats.money >= player.shop[player.shop.pos].price then
       player.stats.money = player.stats.money-player.shop[player.shop.pos].price
-      table.insert(player,player.shop[player.shop.pos])
+      table.insert(player,t_copy(player.shop[player.shop.pos]))
     end
   end
 end
