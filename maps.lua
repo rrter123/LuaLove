@@ -201,7 +201,8 @@ end
 --create or update .lua file with entities
 
 function maps.update_entities(map, map_nr, player_x, player_y)
-  local a = os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil 
+  
+  os.remove("maps/entities_"..(100+map_nr)..".lua") --if doesn't exist we get a nil 
   
   local entities = {}
   for i=1, #map do
