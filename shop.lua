@@ -11,10 +11,10 @@ local damage = {
 shop.pos = 1
 function shop.randomize(lvl)
   for key, val in ipairs(shop) do
-    shop[key]["price"] = math.random(math.floor(lvl*2), math.floor(lvl*3))
+    shop[key]["price"] = math.random(math.floor(lvl*10), math.floor(lvl*20))
     if val.type == "pollen" then
       shop[key]["damage"] = damage[math.random(1, #damage)]
-      shop[key]["atk"] = 5 + math.random(math.floor(lvl*0.5), math.floor(lvl*1.5))
+      shop[key]["atk"] = 5 + math.random(math.floor(lvl*1.5), math.floor(lvl*2.3))
     end
     if val.type == "petal" then
       shop[key]["def"] = 5 + math.random(math.floor(lvl), math.floor(lvl*1.8))

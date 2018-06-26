@@ -166,8 +166,8 @@ local function battle_win()
 end
 
 function player.found_chest()
-  local money = math.random(20)
-  player.stats.money = player.stats.money + money*10
+  local money = math.random(player.stats.level*20)
+  player.stats.money = player.stats.money + money
 end
 function player.gen_enemy(number)
   local damage = { "fire", "water", "earth", "wind" }
