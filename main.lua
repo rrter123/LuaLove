@@ -89,8 +89,8 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "e" then
     if mode == 1 then
       player.equip()
-    end
-    if mode == 2 or mode == 3 then
+    
+    elseif mode == 2 or mode == 3 then
       player.sell_buy(mode)
     else
       local test = checks.around(player.player_x, player.player_y, current_map)
