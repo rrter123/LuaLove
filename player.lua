@@ -176,7 +176,7 @@ function player.gen_enemy(number)
     enemy.stats = {
       level = math.random(player.stats.level),
       hp = math.random(player.stats.maxhp),
-      money = math.random(player.stats.level)*100,
+      money = math.random(player.stats.level)*10,
       atk = math.random(player.stats.atk),
       def = math.random(player.stats.def)}
   else --stronger enemy
@@ -184,7 +184,7 @@ function player.gen_enemy(number)
     enemy.stats = {
       level = math.random(player.stats.level*2),
       hp = math.random(player.stats.maxhp*2),
-      money = math.random(player.stats.level*2)*100,
+      money = math.random(player.stats.level*2)*10,
       atk = math.random(player.stats.atk*2),
       def = math.random(player.stats.def*2)}
   end  
